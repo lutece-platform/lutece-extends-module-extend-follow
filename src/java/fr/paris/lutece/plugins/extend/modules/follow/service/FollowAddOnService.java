@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2013, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,6 +41,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -51,7 +52,6 @@ import javax.servlet.http.HttpServletRequest;
 public class FollowAddOnService implements IResourceDisplayManager
 {
     public static final String PROPERTY_RESOURCE_TYPE = "document";
-    private static final String TAG_FOLLOWERS = "document-follow";
     private static final String TAG_NUMBER_FOLLOWERS = "document-number-follow";
     @Inject
     @Named( FollowService.BEAN_SERVICE )
@@ -76,7 +76,6 @@ public class FollowAddOnService implements IResourceDisplayManager
     public void buildPageAddOn( Map<String, Object> model, String strResourceType, int nIdResource,
         String strPortletId, HttpServletRequest request )
     {
-        // TODO Auto-generated method stub
         return;
     }
 }

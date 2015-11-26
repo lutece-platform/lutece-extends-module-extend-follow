@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,7 @@ import javax.validation.constraints.NotNull;
  */
 public class Follow
 {
-	@NotNull
+    @NotNull
     private int _nIdFollow;
     @NotNull
     private String _strIdExtendableResource;
@@ -65,7 +65,7 @@ public class Follow
      */
     public void setIdFollow( int nIdFollow )
     {
-    	_nIdFollow = nIdFollow;
+        _nIdFollow = nIdFollow;
     }
 
     /**

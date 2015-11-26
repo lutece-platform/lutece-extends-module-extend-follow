@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.extend.modules.follow.service;
 
 import fr.paris.lutece.plugins.extend.modules.follow.business.Follow;
+import fr.paris.lutece.plugins.extend.modules.follow.business.FollowFilter;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -98,7 +99,6 @@ public interface IFollowService
      * @param user The user
      * @param strIdExtendableResource The id of the extendable resource
      * @param strExtendableResourceType The extendable resource type
-     * @param request The request
      */
     void doCancelFollow( LuteceUser user, String strIdExtendableResource, String strExtendableResourceType );
 
@@ -120,15 +120,9 @@ public interface IFollowService
     Follow findByResource( String strIdExtendableResource, String strExtendableResourceType );
 
     /**
-     * Get the ids of resources ordered by their number of follows
-     * @param strExtendableResourceType The type of resources to consider
-     * @param nItemsOffset The offset of the items to get, or 0 to get items
-     *            from the first one
-     * @param nMaxItemsNumber The maximum number of items to return, or 0 to get
-     *            every items
-     * @return The list of ids of resources ordered by the number of associated
-     *         comments
+     * Find by filter
+     * @param filter the filter
+     * @return list Follow by filter
      */
-    public List<Integer> findIdMostRatedResources( String strExtendableResourceType, int nItemsOffset,
-        int nMaxItemsNumber );
+    List<Follow> findByFilter( FollowFilter filter );
 }

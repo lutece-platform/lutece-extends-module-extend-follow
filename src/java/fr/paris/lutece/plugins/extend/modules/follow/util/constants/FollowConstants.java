@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -82,6 +82,7 @@ public final class FollowConstants
     public static final String MARK_CAN_FOLLOW = "canFollow";
     public static final String MARK_CAN_DELETE_FOLLOW = "canDeleteFollow";
     public static final String MARK_FOLLOW_CLOSED = "followClosed";
+    public static final String MARK_EXTEND_FOLLOW = "extend_follow";
 
     // CONSTANTS
     public static final String JSON_KEY_SHOW = "show";

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,14 +34,15 @@
 package fr.paris.lutece.plugins.extend.modules.follow.service.extender;
 
 import fr.paris.lutece.plugins.extend.business.extender.ResourceExtenderDTO;
-import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.FollowService;
+import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
 import fr.paris.lutece.plugins.extend.service.extender.AbstractResourceExtender;
 
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -52,11 +53,10 @@ public class FollowResourceExtender extends AbstractResourceExtender
 {
     /** The Constant RESOURCE_EXTENDER. */
     public static final String RESOURCE_EXTENDER = "follow";
-
     @Inject
     @Named( FollowService.BEAN_SERVICE )
     private IFollowService _followService;
-   
+
     /**
      * {@inheritDoc}
      */
@@ -88,7 +88,6 @@ public class FollowResourceExtender extends AbstractResourceExtender
     @Override
     public void doCreateResourceAddOn( ResourceExtenderDTO extender )
     {
-     
     }
 
     /**
@@ -97,6 +96,5 @@ public class FollowResourceExtender extends AbstractResourceExtender
     @Override
     public void doDeleteResourceAddOn( ResourceExtenderDTO extender )
     {
-       
     }
 }

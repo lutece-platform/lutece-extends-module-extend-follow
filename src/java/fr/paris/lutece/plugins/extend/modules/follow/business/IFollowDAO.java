@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,10 +63,10 @@ public interface IFollowDAO
     /**
      * Insert.
      *
-     * @param Follow the Follow
+     * @param follow the Follow
      * @param plugin the plugin
      */
-    void insert( Follow Follow, Plugin plugin );
+    void insert( Follow follow, Plugin plugin );
 
     /**
      * Load.
@@ -80,10 +80,10 @@ public interface IFollowDAO
     /**
      * Store.
      *
-     * @param Follow the Follow
+     * @param follow the Follow
      * @param plugin the plugin
      */
-    void store( Follow Follow, Plugin plugin );
+    void store( Follow follow, Plugin plugin );
 
     /**
      * Select by id hub resource.
@@ -96,16 +96,10 @@ public interface IFollowDAO
     Follow loadByResource( String strIdExtendableResource, String strExtendableResourceType, Plugin plugin );
 
     /**
-     * Get the ids of resources ordered by their number of Follows
-     * @param strExtendableResourceType The type of resources to consider
-     * @param nItemsOffset The offset of the items to get, or 0 to get items
-     *            from the first one
-     * @param nMaxItemsNumber The maximum number of items to return, or 0 to get
-     *            every items
+     *
+     * @param filter the filter
      * @param plugin the plugin
-     * @return The list of ids of resources ordered by the number of associated
-     *         comments
+     * @return List Follow
      */
-    List<Integer> findIdMostRatedResources( String strExtendableResourceType, int nItemsOffset, int nMaxItemsNumber,
-        Plugin plugin );
+    List<Follow> loadByFilter( FollowFilter filter, Plugin plugin );
 }

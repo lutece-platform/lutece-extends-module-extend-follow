@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,16 +35,22 @@ package fr.paris.lutece.plugins.extend.modules.follow.service;
 
 import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistory;
 import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistoryFilter;
-import fr.paris.lutece.plugins.extend.modules.follow.business.IFollowDAO;
 import fr.paris.lutece.plugins.extend.modules.follow.business.Follow;
+import fr.paris.lutece.plugins.extend.modules.follow.business.FollowFilter;
 import fr.paris.lutece.plugins.extend.modules.follow.business.FollowHistory;
+import fr.paris.lutece.plugins.extend.modules.follow.business.IFollowDAO;
 import fr.paris.lutece.plugins.extend.modules.follow.service.extender.FollowResourceExtender;
 import fr.paris.lutece.plugins.extend.service.extender.history.IResourceExtenderHistoryService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
+
 import org.apache.commons.collections.CollectionUtils;
+
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -89,10 +95,10 @@ public class FollowService implements IFollowService
      */
     @Override
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
-   synchronized public void doFollow( String strIdExtendableResource, String strExtendableResourceType, int nVoteValue,
-        HttpServletRequest request )
+    public synchronized void doFollow( String strIdExtendableResource, String strExtendableResourceType,
+        int nVoteValue, HttpServletRequest request )
     {
-    	Follow follow = findByResource( strIdExtendableResource, strExtendableResourceType );
+        Follow follow = findByResource( strIdExtendableResource, strExtendableResourceType );
 
         // Create the follow if not exists
         if ( follow == null )
@@ -105,10 +111,10 @@ public class FollowService implements IFollowService
         }
         else
         {
-            follow.setFollowCount( follow.getFollowCount( ) + 1 );
+            follow.setFollowCount( follow.getFollowCount(  ) + 1 );
             update( follow );
         }
-        
+
         ResourceExtenderHistory history = _resourceExtenderHistoryService.create( FollowResourceExtender.RESOURCE_EXTENDER,
                 strIdExtendableResource, strExtendableResourceType, request );
 
@@ -123,7 +129,8 @@ public class FollowService implements IFollowService
      */
     @Override
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
-    synchronized  public void doCancelFollow( LuteceUser user, String strIdExtendableResource, String strExtendableResourceType )
+    public synchronized void doCancelFollow( LuteceUser user, String strIdExtendableResource,
+        String strExtendableResourceType )
     {
         ResourceExtenderHistoryFilter resourceExtenderHistoryFilter = new ResourceExtenderHistoryFilter(  );
         resourceExtenderHistoryFilter.setUserGuid( user.getName(  ) );
@@ -133,20 +140,21 @@ public class FollowService implements IFollowService
 
         if ( CollectionUtils.isNotEmpty( histories ) )
         {
-        	for(ResourceExtenderHistory history : histories)
-        	{
-        		FollowHistory followHistory = _followHistoryService.findByHistoryExtenderId( history.getIdHistory(  ) );
-	            if ( followHistory != null )
-	            {
-		            _followHistoryService.remove( followHistory.getIdFollowHistory(  ) );
-		            
-		            Follow follow = findByResource( strIdExtendableResource, strExtendableResourceType );
-		            follow.setFollowCount( follow.getFollowCount(  ) - 1 );
-		            update( follow );
-	            }
-	            _resourceExtenderHistoryService.remove( Integer.valueOf( "" + history.getIdHistory(  ) ) );
-	            	         
-        	}
+            for ( ResourceExtenderHistory history : histories )
+            {
+                FollowHistory followHistory = _followHistoryService.findByHistoryExtenderId( history.getIdHistory(  ) );
+
+                if ( followHistory != null )
+                {
+                    _followHistoryService.remove( followHistory.getIdFollowHistory(  ) );
+
+                    Follow follow = findByResource( strIdExtendableResource, strExtendableResourceType );
+                    follow.setFollowCount( follow.getFollowCount(  ) - 1 );
+                    update( follow );
+                }
+
+                _resourceExtenderHistoryService.remove( Integer.valueOf( "" + history.getIdHistory(  ) ) );
+            }
         }
     }
 
@@ -194,10 +202,8 @@ public class FollowService implements IFollowService
      * {@inheritDoc}
      */
     @Override
-    public List<Integer> findIdMostRatedResources( String strExtendableResourceType, int nItemsOffset,
-        int nMaxItemsNumber )
+    public List<Follow> findByFilter( FollowFilter filter )
     {
-        return _followDAO.findIdMostRatedResources( strExtendableResourceType, nItemsOffset, nMaxItemsNumber,
-            FollowPlugin.getPlugin(  ) );
+        return _followDAO.loadByFilter( filter, FollowPlugin.getPlugin(  ) );
     }
 }

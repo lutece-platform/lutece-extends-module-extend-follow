@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.extend.modules.follow.service;
 
-import fr.paris.lutece.plugins.extend.modules.follow.business.IFollowHistoryDAO;
 import fr.paris.lutece.plugins.extend.modules.follow.business.FollowHistory;
+import fr.paris.lutece.plugins.extend.modules.follow.business.IFollowHistoryDAO;
 
 import javax.inject.Inject;
 

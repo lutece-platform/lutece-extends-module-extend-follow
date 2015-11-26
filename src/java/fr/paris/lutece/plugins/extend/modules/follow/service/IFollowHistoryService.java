@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,10 +62,10 @@ public interface IFollowHistoryService
 
     /**
      * Insert.
-     * @param FollowHistory the FollowHistory
+     * @param followHistory the FollowHistory
      */
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
-    void create( FollowHistory FollowHistory );
+    void create( FollowHistory followHistory );
 
     /**
      * Find a {@link FollowHistory}

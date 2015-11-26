@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,10 +56,6 @@ public class FollowDAO implements IFollowDAO
     private static final String SQL_QUERY_DELETE_BY_RESOURCE = " DELETE FROM extend_follow WHERE resource_type = ? ";
     private static final String SQL_QUERY_FILTER_ID_RESOURCE = " AND id_resource = ? ";
     private static final String SQL_QUERY_UPDATE = " UPDATE extend_follow SET id_resource = ?, resource_type = ?, follow_count = ? WHERE id_follow = ?  ";
-    private static final String SQL_QUERY_SELECT_ID_MOST_RATED_RESOURCES = " SELECT DISTINCT(id_resource) FROM extend_follow WHERE resource_type = ? ORDER BY follow_count ";
-    private static final String SQL_LIMIT = " LIMIT ";
-    private static final String CONSTANT_COMMA = ",";
-    private static final String CONSTANT_QUESTION_MARK = "?";
 
     /**
      * Generates a new primary key.
@@ -223,57 +219,27 @@ public class FollowDAO implements IFollowDAO
      * {@inheritDoc}
      */
     @Override
-    public List<Integer> findIdMostRatedResources( String strExtendableResourceType, int nItemsOffset,
-        int nMaxItemsNumber, Plugin plugin )
+    public List<Follow> loadByFilter( FollowFilter filter, Plugin plugin )
     {
-        List<Integer> listIds;
-
-        if ( nMaxItemsNumber > 0 )
-        {
-            listIds = new ArrayList<Integer>( nMaxItemsNumber );
-        }
-        else
-        {
-            listIds = new ArrayList<Integer>(  );
-        }
-
-        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECT_ID_MOST_RATED_RESOURCES );
-
-        if ( nMaxItemsNumber > 0 )
-        {
-            sbSQL.append( SQL_LIMIT );
-
-            if ( nItemsOffset > 0 )
-            {
-                sbSQL.append( CONSTANT_QUESTION_MARK ).append( CONSTANT_COMMA );
-            }
-
-            sbSQL.append( CONSTANT_QUESTION_MARK );
-        }
-
-        int nIndex = 1;
-        DAOUtil daoUtil = new DAOUtil( sbSQL.toString(  ), plugin );
-        daoUtil.setString( nIndex++, strExtendableResourceType );
-
-        if ( nMaxItemsNumber > 0 )
-        {
-            if ( nItemsOffset > 0 )
-            {
-                daoUtil.setInt( nIndex++, nItemsOffset );
-            }
-
-            daoUtil.setInt( nIndex, nMaxItemsNumber );
-        }
-
+        List<Follow> listFollow = new ArrayList<Follow>(  );
+        DAOUtil daoUtil = new DAOUtil( filter.buildSQLQuery( SQL_QUERY_SELECT_ALL ), plugin );
+        filter.setFilterValues( daoUtil );
         daoUtil.executeQuery(  );
 
         while ( daoUtil.next(  ) )
         {
-            listIds.add( daoUtil.getInt( 1 ) );
+            int nIndex = 1;
+            Follow follow = new Follow(  );
+            follow.setIdFollow( daoUtil.getInt( nIndex++ ) );
+            follow.setIdExtendableResource( daoUtil.getString( nIndex++ ) );
+            follow.setExtendableResourceType( daoUtil.getString( nIndex++ ) );
+            follow.setFollowCount( daoUtil.getInt( nIndex ) );
+
+            listFollow.add( follow );
         }
 
         daoUtil.free(  );
 
-        return listIds;
+        return listFollow;
     }
 }

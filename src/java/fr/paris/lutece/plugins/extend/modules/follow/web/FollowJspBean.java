@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,11 @@
  */
 package fr.paris.lutece.plugins.extend.modules.follow.web;
 
-import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowHistoryService;
-import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
-import fr.paris.lutece.plugins.extend.modules.follow.service.FollowHistoryService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.FollowService;
+import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.validator.FollowValidationManagementService;
 import fr.paris.lutece.plugins.extend.modules.follow.util.constants.FollowConstants;
 import fr.paris.lutece.plugins.extend.service.ExtendPlugin;
-import fr.paris.lutece.plugins.extend.service.extender.IResourceExtenderService;
-import fr.paris.lutece.plugins.extend.service.extender.ResourceExtenderService;
-import fr.paris.lutece.plugins.extend.service.extender.config.IResourceExtenderConfigService;
-import fr.paris.lutece.plugins.extend.service.extender.history.IResourceExtenderHistoryService;
-import fr.paris.lutece.plugins.extend.service.extender.history.ResourceExtenderHistoryService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.message.SiteMessageService;
@@ -54,8 +47,11 @@ import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.url.UrlItem;
+
 import org.apache.commons.lang.StringUtils;
+
 import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -72,11 +68,7 @@ public class FollowJspBean
 
     // SERVICES
     private IFollowService _followService = SpringContextService.getBean( FollowService.BEAN_SERVICE );
-    private IResourceExtenderHistoryService _resourceExtenderHistoryService = SpringContextService.getBean( ResourceExtenderHistoryService.BEAN_SERVICE );
-    private IResourceExtenderConfigService _configService = SpringContextService.getBean( FollowConstants.BEAN_CONFIG_SERVICE );
-    private IResourceExtenderService _resourceExtenderService = SpringContextService.getBean( ResourceExtenderService.BEAN_SERVICE );
-    private IFollowHistoryService _followHistoryService = SpringContextService.getBean( FollowHistoryService.BEAN_SERVICE );
-    
+
     /**
      * Update the follow value an count.
      * This method is called in FO by the following JSP :
