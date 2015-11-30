@@ -40,7 +40,7 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 
 /**
  *
- * RatingPlugin
+ * FollowPlugin
  *
  */
 public class FollowPlugin extends PluginDefaultImplementation

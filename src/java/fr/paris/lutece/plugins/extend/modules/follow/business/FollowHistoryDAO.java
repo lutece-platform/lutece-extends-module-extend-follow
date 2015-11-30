@@ -38,7 +38,7 @@ import fr.paris.lutece.util.sql.DAOUtil;
 
 
 /**
- * This class provides Data Access methods for Rating objects.
+ * This class provides Data Access methods for Follow objects.
  */
 public class FollowHistoryDAO implements IFollowHistoryDAO
 {
@@ -93,16 +93,16 @@ public class FollowHistoryDAO implements IFollowHistoryDAO
     }
 
     @Override
-    public void create( FollowHistory ratingHistory, Plugin plugin )
+    public void create( FollowHistory followHistory, Plugin plugin )
     {
-        ratingHistory.setIdFollowHistory( newPrimaryKey( plugin ) );
+        followHistory.setIdFollowHistory( newPrimaryKey( plugin ) );
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         int nIndex = 1;
 
-        daoUtil.setInt( nIndex++, ratingHistory.getIdFollowHistory(  ) );
-        daoUtil.setLong( nIndex++, ratingHistory.getIdExtenderHistory(  ) );
-        daoUtil.setInt( nIndex++, ratingHistory.getFollowValue(  ) );
+        daoUtil.setInt( nIndex++, followHistory.getIdFollowHistory(  ) );
+        daoUtil.setLong( nIndex++, followHistory.getIdExtenderHistory(  ) );
+        daoUtil.setInt( nIndex++, followHistory.getFollowValue(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -117,18 +117,18 @@ public class FollowHistoryDAO implements IFollowHistoryDAO
 
         daoUtil.executeQuery(  );
 
-        FollowHistory ratingHistory = null;
+        FollowHistory followHistory = null;
 
         if ( daoUtil.next(  ) )
         {
-            ratingHistory = new FollowHistory(  );
-            ratingHistory.setIdFollowHistory( daoUtil.getInt( 1 ) );
-            ratingHistory.setIdExtenderHistory( daoUtil.getLong( 2 ) );
-            ratingHistory.setFollowValue( daoUtil.getInt( 3 ) );
+            followHistory = new FollowHistory(  );
+            followHistory.setIdFollowHistory( daoUtil.getInt( 1 ) );
+            followHistory.setIdExtenderHistory( daoUtil.getLong( 2 ) );
+            followHistory.setFollowValue( daoUtil.getInt( 3 ) );
         }
 
         daoUtil.free(  );
 
-        return ratingHistory;
+        return followHistory;
     }
 }

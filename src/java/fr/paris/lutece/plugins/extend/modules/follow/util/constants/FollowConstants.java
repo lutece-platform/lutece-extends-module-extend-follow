@@ -42,16 +42,16 @@ package fr.paris.lutece.plugins.extend.modules.follow.util.constants;
 public final class FollowConstants
 {
     // PROPERTIES
-    public static final String PROPERTY_RATING_CONFIG_LABEL_NO_MAILING_LIST = "module.extend.rating.rating_config.labelNoMailingList";
+    public static final String PROPERTY_FOLLOW_CONFIG_LABEL_NO_MAILING_LIST = "module.extend.follow.follow_config.labelNoMailingList";
     public static final String PROPERTY_WEBMASTER_EMAIL = "email.webmaster";
     public static final String PROPERTY_LUTECE_NAME = "lutece.name";
-    public static final String PROPERTY_MANAGE_VOTE_TYPES_PAGE_TITLE = "module.extend.rating.manage_vote_types.pageTitle";
+    public static final String PROPERTY_MANAGE_VOTE_TYPES_PAGE_TITLE = "module.extend.follow.manage_vote_types.pageTitle";
 
     // MESSAGES
-    public static final String MESSAGE_NOTIFY_SUBJECT = "module.extend.rating.message.notify.subject";
-    public static final String MESSAGE_ERROR_GENERIC_MESSAGE = "module.extend.rating.message.error.genericMessage";
-    public static final String MESSAGE_STOP_GENERIC_MESSAGE = "module.extend.rating.message.stop.genericMessage";
-    public static final String MESSAGE_CANNOT_VOTE = "module.extend.rating.message.cannotVote";
+    public static final String MESSAGE_NOTIFY_SUBJECT = "module.extend.follow.message.notify.subject";
+    public static final String MESSAGE_ERROR_GENERIC_MESSAGE = "module.extend.follow.message.error.genericMessage";
+    public static final String MESSAGE_STOP_GENERIC_MESSAGE = "module.extend.follow.message.stop.genericMessage";
+    public static final String MESSAGE_CANNOT_VOTE = "module.extend.follow.message.cannotVote";
 
     // PARAMETERS
     public static final String PARAMETER_ID_EXTENDABLE_RESOURCE = "idExtendableResource";
@@ -62,13 +62,13 @@ public final class FollowConstants
     public static final String PARAMETER_CANCEL = "cancel";
 
     // BEANS
-    public static final String BEAN_CONFIG_SERVICE = "extend-rating.ratingExtenderConfigService";
+    public static final String BEAN_CONFIG_SERVICE = "extend-follow.followExtenderConfigService";
 
     // MARKS
     public static final String MARK_FOLLOW = "follow";
     public static final String MARK_ID_EXTENDABLE_RESOURCE = "idExtendableResource";
     public static final String MARK_EXTENDABLE_RESOURCE_TYPE = "extendableResourceType";
-    public static final String MARK_RATING_CONFIG = "ratingConfig";
+    public static final String MARK_follow_CONFIG = "followConfig";
     public static final String MARK_LIST_IDS_MAILING_LIST = "listIdsMailingList";
     public static final String MARK_RESOURCE_EXTENDER_NAME = "resourceExtenderName";
     public static final String MARK_VOTE_VALUE = "voteValue";

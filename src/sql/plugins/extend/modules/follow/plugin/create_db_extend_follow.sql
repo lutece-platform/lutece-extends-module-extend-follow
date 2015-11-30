@@ -11,7 +11,7 @@ CREATE TABLE extend_follow (
 );
 
 --
--- Structure for table extend_follow_vote_history
+-- Structure for table extend_follow_history
 --
 DROP TABLE IF EXISTS extend_follow_history;
 CREATE TABLE extend_follow_history (
