@@ -111,7 +111,10 @@ public class FollowJspBean
                 if ( StringUtils.isNotEmpty( strFromUrl ) )
                 {
                     strFromUrl = strFromUrl.replaceAll( "%", "%25" );
-                    url.addParameter( FollowConstants.PARAMETER_FROM_URL, strFromUrl );
+                    if ( !url.getUrl(  ).contains(  FollowConstants.PARAMETER_FROM_URL ) )
+                    {
+                        url.addParameter( FollowConstants.PARAMETER_FROM_URL, strFromUrl );
+                    }
                 }
 
                 strNextUrl = url.getUrl(  );
@@ -195,7 +198,10 @@ public class FollowJspBean
             if ( StringUtils.isNotEmpty( strFromUrl ) )
             {
                 strFromUrl = strFromUrl.replaceAll( "%", "%25" );
-                url.addParameter( FollowConstants.PARAMETER_FROM_URL, strFromUrl );
+                if ( !url.getUrl(  ).contains(  FollowConstants.PARAMETER_FROM_URL ) )
+                {
+                    url.addParameter( FollowConstants.PARAMETER_FROM_URL, strFromUrl );
+                }
             }
 
             response.sendRedirect( url.getUrl(  ) );
