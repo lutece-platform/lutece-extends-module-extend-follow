@@ -135,6 +135,8 @@ public class FollowService implements IFollowService
         ResourceExtenderHistoryFilter resourceExtenderHistoryFilter = new ResourceExtenderHistoryFilter(  );
         resourceExtenderHistoryFilter.setUserGuid( user.getName(  ) );
         resourceExtenderHistoryFilter.setIdExtendableResource( strIdExtendableResource );
+        resourceExtenderHistoryFilter.setExtendableResourceType( strExtendableResourceType );
+        resourceExtenderHistoryFilter.setExtenderType( FollowResourceExtender.RESOURCE_EXTENDER );
 
         List<ResourceExtenderHistory> histories = _resourceExtenderHistoryService.findByFilter( resourceExtenderHistoryFilter );
 
