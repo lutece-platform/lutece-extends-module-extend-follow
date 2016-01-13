@@ -99,8 +99,10 @@ public interface IFollowService
      * @param user The user
      * @param strIdExtendableResource The id of the extendable resource
      * @param strExtendableResourceType The extendable resource type
+     * @param request the request
      */
-    void doCancelFollow( LuteceUser user, String strIdExtendableResource, String strExtendableResourceType );
+    void doCancelFollow( LuteceUser user, String strIdExtendableResource, String strExtendableResourceType,
+            HttpServletRequest request );
 
     /**
      * Load.

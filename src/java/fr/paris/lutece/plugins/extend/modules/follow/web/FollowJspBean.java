@@ -187,7 +187,7 @@ public class FollowJspBean
             SiteMessageService.setMessage( request, FollowConstants.MESSAGE_ERROR_GENERIC_MESSAGE, SiteMessage.TYPE_STOP );
         }
 
-        _followService.doCancelFollow( user, strIdExtendableResource, strExtendableResourceType );
+        _followService.doCancelFollow( user, strIdExtendableResource, strExtendableResourceType,request);
 
         String strReferer = request.getHeader( FollowConstants.PARAMETER_HTTP_REFERER );
 

@@ -39,6 +39,7 @@ import fr.paris.lutece.plugins.extend.modules.follow.business.Follow;
 import fr.paris.lutece.plugins.extend.modules.follow.business.FollowFilter;
 import fr.paris.lutece.plugins.extend.modules.follow.business.FollowHistory;
 import fr.paris.lutece.plugins.extend.modules.follow.business.IFollowDAO;
+import fr.paris.lutece.plugins.extend.modules.follow.service.FollowListenerService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.extender.FollowResourceExtender;
 import fr.paris.lutece.plugins.extend.service.extender.history.IResourceExtenderHistoryService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
@@ -122,6 +123,10 @@ public class FollowService implements IFollowService
         followHistory.setIdExtenderHistory( history.getIdHistory(  ) );
         followHistory.setFollowValue( nVoteValue );
         _followHistoryService.create( followHistory );
+        //Call Listener
+        FollowListenerService.follow(strExtendableResourceType, strIdExtendableResource, request);
+        
+        
     }
 
     /**
@@ -130,7 +135,7 @@ public class FollowService implements IFollowService
     @Override
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     public synchronized void doCancelFollow( LuteceUser user, String strIdExtendableResource,
-        String strExtendableResourceType )
+        String strExtendableResourceType ,HttpServletRequest request)
     {
         ResourceExtenderHistoryFilter resourceExtenderHistoryFilter = new ResourceExtenderHistoryFilter(  );
         resourceExtenderHistoryFilter.setUserGuid( user.getName(  ) );
@@ -153,6 +158,9 @@ public class FollowService implements IFollowService
                     Follow follow = findByResource( strIdExtendableResource, strExtendableResourceType );
                     follow.setFollowCount( follow.getFollowCount(  ) - 1 );
                     update( follow );
+                    //Call Listener
+                    FollowListenerService.cancelFollow(strExtendableResourceType, strIdExtendableResource, request);
+
                 }
 
                 _resourceExtenderHistoryService.remove( Integer.valueOf( "" + history.getIdHistory(  ) ) );
