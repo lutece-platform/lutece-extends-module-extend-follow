@@ -1,0 +1,5 @@
+--
+-- Init core_template
+--
+
+INSERT INTO core_template VALUES ('extend_follow','\r\n<#if !followClosed>	<#if canDeleteFollow>	<div>		<p> #i18n{module.extend.follow.extender.closed.label} : 		<a href="jsp/site/plugins/extend/modules/follow/DoCancelFollow.jsp?idExtendableResource=${idExtendableResource!}&extendableResourceType=${extendableResourceType!}" > #i18n{module.extend.follow.extender.cancelFollow.label}</a>		</p>	</div>	</#if>	<#if show == "all" || show == "actionFollow">		<#if canFollow && !canDeleteFollow >		<div>			<span><a href="jsp/site/plugins/extend/modules/follow/DoFollow.jsp?idExtendableResource=${idExtendableResource!}&extendableResourceType=${extendableResourceType!}&followValue=1"> #i18n{module.extend.follow.extender.doFollow.label}</a></span>		</div>		</#if>	</#if>\r\n</#if><#if follow??><p> #i18n{module.extend.follow.extender.count.label} :  ${follow.followCount} </p></#if>');
