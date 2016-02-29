@@ -33,11 +33,16 @@
  */
 package fr.paris.lutece.plugins.extend.modules.follow.web;
 
+import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistory;
+import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistoryFilter;
 import fr.paris.lutece.plugins.extend.modules.follow.service.FollowService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
+import fr.paris.lutece.plugins.extend.modules.follow.service.extender.FollowResourceExtender;
 import fr.paris.lutece.plugins.extend.modules.follow.service.validator.FollowValidationManagementService;
 import fr.paris.lutece.plugins.extend.modules.follow.util.constants.FollowConstants;
 import fr.paris.lutece.plugins.extend.service.ExtendPlugin;
+import fr.paris.lutece.plugins.extend.service.extender.history.IResourceExtenderHistoryService;
+import fr.paris.lutece.plugins.extend.service.extender.history.ResourceExtenderHistoryService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.message.SiteMessageService;
@@ -51,7 +56,9 @@ import fr.paris.lutece.util.url.UrlItem;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
+import java.util.List;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -67,6 +74,8 @@ public class FollowJspBean
     private static final String CONSTANT_HTTP = "http";
 
     // SERVICES
+    @Inject
+    private IResourceExtenderHistoryService _resourceExtenderHistoryService = SpringContextService.getBean( ResourceExtenderHistoryService.BEAN_SERVICE );;
     private IFollowService _followService = SpringContextService.getBean( FollowService.BEAN_SERVICE );
 
     /**
@@ -158,8 +167,20 @@ public class FollowJspBean
             return;
         }
 
-        _followService.doFollow( strIdExtendableResource, strExtendableResourceType, nFollowValue, request );
+        ResourceExtenderHistoryFilter filter = new ResourceExtenderHistoryFilter(  );
 
+        filter.setExtenderType( FollowResourceExtender.RESOURCE_EXTENDER );
+        filter.setUserGuid( SecurityService.getInstance(  ).getRemoteUser( request ).getName(  ) );
+        filter.setExtendableResourceType( strExtendableResourceType );
+        filter.setIdExtendableResource( strIdExtendableResource );
+        
+        List<ResourceExtenderHistory> listHistories = _resourceExtenderHistoryService.findByFilter( filter ); 
+        
+        if( listHistories.isEmpty( ) )
+        {
+        	_followService.doFollow( strIdExtendableResource, strExtendableResourceType, nFollowValue, request );
+        }
+        
         response.sendRedirect( strNextUrl );
     }
 
