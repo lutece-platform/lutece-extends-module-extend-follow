@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowListener;
+import fr.paris.lutece.portal.service.security.LuteceUser;
 
 public class FollowListenerService {
 	  
@@ -87,5 +87,18 @@ public class FollowListenerService {
 	    }
 	    
 
+	    public static boolean canFollow( String strExtendableResourceType, String strIdExtendableResource, LuteceUser user )
+	    {
+	    	 List<IFollowListener> listListeners = _mapListeners.get( strExtendableResourceType );
+		     boolean res = false;   
+	    	 if ( listListeners != null )
+		        {
+		            for ( IFollowListener listener : listListeners )
+		            {
+		            	return listener.canFollow(strExtendableResourceType, strIdExtendableResource, user);
+		            }
+		        }
+	    	 return res ;
+	    }
 
 }

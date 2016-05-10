@@ -1,6 +1,10 @@
 package fr.paris.lutece.plugins.extend.modules.follow.service;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.portal.service.security.LuteceUser;
 
 /**
  * 
@@ -25,4 +29,11 @@ public interface IFollowListener {
 	 */
 	void cancelFollow( String strExtendableResourceType, String strIdExtendableResource, HttpServletRequest request );
 	
+    /**
+     * Can Follow
+     * @param startDate the start date
+     * @param endDate the end date
+     * @return boolean if can Follow
+     */
+	boolean canFollow( String strExtendableResourceType, String strIdExtendableResource, LuteceUser user ) ;
 }

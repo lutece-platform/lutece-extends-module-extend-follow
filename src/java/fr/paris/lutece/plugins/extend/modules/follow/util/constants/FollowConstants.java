@@ -52,6 +52,7 @@ public final class FollowConstants
     public static final String MESSAGE_ERROR_GENERIC_MESSAGE = "module.extend.follow.message.error.genericMessage";
     public static final String MESSAGE_STOP_GENERIC_MESSAGE = "module.extend.follow.message.stop.genericMessage";
     public static final String MESSAGE_CANNOT_VOTE = "module.extend.follow.message.cannotVote";
+    public static final String MESSAGE_PHASE_IS_CLOSE = "module.extend.follow.message.phaseIsClose";
 
     // PARAMETERS
     public static final String PARAMETER_ID_EXTENDABLE_RESOURCE = "idExtendableResource";

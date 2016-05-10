@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.extend.modules.follow.web;
 
 import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistory;
 import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistoryFilter;
+import fr.paris.lutece.plugins.extend.modules.follow.service.FollowListenerService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.FollowService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.extender.FollowResourceExtender;
@@ -178,7 +179,14 @@ public class FollowJspBean
         
         if( listHistories.isEmpty( ) )
         {
-        	_followService.doFollow( strIdExtendableResource, strExtendableResourceType, nFollowValue, request );
+        	if ( FollowListenerService.canFollow( strExtendableResourceType, strIdExtendableResource, SecurityService.getInstance(  ).getRemoteUser( request ) ) )
+        	{
+        		_followService.doFollow( strIdExtendableResource, strExtendableResourceType, nFollowValue, request );
+        	}
+        	else
+            {
+            	SiteMessageService.setMessage( request, FollowConstants.MESSAGE_PHASE_IS_CLOSE, SiteMessage.TYPE_STOP );
+            }
         }
         
         response.sendRedirect( strNextUrl );
@@ -207,9 +215,14 @@ public class FollowJspBean
         {
             SiteMessageService.setMessage( request, FollowConstants.MESSAGE_ERROR_GENERIC_MESSAGE, SiteMessage.TYPE_STOP );
         }
-
-        _followService.doCancelFollow( user, strIdExtendableResource, strExtendableResourceType,request);
-
+        if ( FollowListenerService.canFollow( strExtendableResourceType, strIdExtendableResource, user ) )
+    	{
+        	_followService.doCancelFollow( user, strIdExtendableResource, strExtendableResourceType,request);
+    	}
+        else
+        {
+        	SiteMessageService.setMessage( request, FollowConstants.MESSAGE_PHASE_IS_CLOSE, SiteMessage.TYPE_STOP );
+        }
         String strReferer = request.getHeader( FollowConstants.PARAMETER_HTTP_REFERER );
 
         if ( strReferer != null )
