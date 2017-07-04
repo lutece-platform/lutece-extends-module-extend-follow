@@ -10,7 +10,7 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>module-extend-follow</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>Lutece extendfollow plugin</name>
 
     <repositories>
@@ -46,6 +46,6 @@
         <connection>scm:git:https://github.com/lutece-platform/lutece-extends-module-extend-follow.git</connection>
         <developerConnection>scm:git:https://github.com/lutece-platform/lutece-extends-module-extend-follow.git</developerConnection>
         <url>https://github.com/lutece-platform/lutece-extends-module-extend-follow.git</url>
-      <tag>module-extend-follow-1.0.2</tag>
+      <tag>HEAD</tag>
   </scm>
 </project>
