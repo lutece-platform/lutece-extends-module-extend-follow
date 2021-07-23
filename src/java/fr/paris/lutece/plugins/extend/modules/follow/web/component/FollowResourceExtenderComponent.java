@@ -53,8 +53,7 @@ import fr.paris.lutece.portal.service.template.DatabaseTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -164,17 +163,17 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
     private String fetchShowParameter( String strParameters )
     {
         String strShowParameter = StringUtils.EMPTY;
-        JSONObject jsonParameters = JSONUtils.parseParameters( strParameters );
+        ObjectNode jsonParameters = JSONUtils.parseParameters( strParameters );
 
         if ( jsonParameters != null )
         {
-            try
+            if ( jsonParameters.has( FollowConstants.JSON_KEY_SHOW ) )
             {
-                strShowParameter = jsonParameters.getString( FollowConstants.JSON_KEY_SHOW );
+                strShowParameter = jsonParameters.get( FollowConstants.JSON_KEY_SHOW ).asText( );
             }
-            catch ( JSONException je )
+            else
             {
-                AppLogService.debug( je.getMessage(  ), je );
+                AppLogService.debug( "No " + FollowConstants.JSON_KEY_SHOW + " found in " + jsonParameters );
             }
         }
 
