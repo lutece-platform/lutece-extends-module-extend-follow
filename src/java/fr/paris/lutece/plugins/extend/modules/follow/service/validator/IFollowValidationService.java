@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.security.LuteceUser;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Interface of follow validation services
  */
@@ -45,14 +44,18 @@ public interface IFollowValidationService
 {
     /**
      * Check if a user is allowed to validate a resource
-     * @param request The request
-     * @param user The user that wants to rate a resource
-     * @param strIdResource the id of the resource
-     * @param strResourceTypeKey The resource type key
-     * @param nVoteValue The value of the vote
-     * @return The URL to redirect the user if he is not allowed to rate the
-     *         resource, or null if he is allowed
+     * 
+     * @param request
+     *            The request
+     * @param user
+     *            The user that wants to rate a resource
+     * @param strIdResource
+     *            the id of the resource
+     * @param strResourceTypeKey
+     *            The resource type key
+     * @param nVoteValue
+     *            The value of the vote
+     * @return The URL to redirect the user if he is not allowed to rate the resource, or null if he is allowed
      */
-    String validateFollow( HttpServletRequest request, LuteceUser user, String strIdResource,
-        String strResourceTypeKey, int nVoteValue );
+    String validateFollow( HttpServletRequest request, LuteceUser user, String strIdResource, String strResourceTypeKey, int nVoteValue );
 }

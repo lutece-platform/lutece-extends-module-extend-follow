@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  * ICommentDAO.
  */
@@ -46,33 +45,42 @@ public interface IFollowDAO
     /**
      * Delete.
      *
-     * @param nIdFollow the n id Follow
-     * @param plugin the plugin
+     * @param nIdFollow
+     *            the n id Follow
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdFollow, Plugin plugin );
 
     /**
      * Delete by id hub resource.
      *
-     * @param strIdExtendableResource the str id extendable resource
-     * @param strExtendableResourceType the str extendable resource type
-     * @param plugin the plugin
+     * @param strIdExtendableResource
+     *            the str id extendable resource
+     * @param strExtendableResourceType
+     *            the str extendable resource type
+     * @param plugin
+     *            the plugin
      */
     void deleteByResource( String strIdExtendableResource, String strExtendableResourceType, Plugin plugin );
 
     /**
      * Insert.
      *
-     * @param follow the Follow
-     * @param plugin the plugin
+     * @param follow
+     *            the Follow
+     * @param plugin
+     *            the plugin
      */
     void insert( Follow follow, Plugin plugin );
 
     /**
      * Load.
      *
-     * @param nIdFollow the n id Follow
-     * @param plugin the plugin
+     * @param nIdFollow
+     *            the n id Follow
+     * @param plugin
+     *            the plugin
      * @return the Follow
      */
     Follow load( int nIdFollow, Plugin plugin );
@@ -80,25 +88,32 @@ public interface IFollowDAO
     /**
      * Store.
      *
-     * @param follow the Follow
-     * @param plugin the plugin
+     * @param follow
+     *            the Follow
+     * @param plugin
+     *            the plugin
      */
     void store( Follow follow, Plugin plugin );
 
     /**
      * Select by id hub resource.
      *
-     * @param strIdExtendableResource the str id extendable resource
-     * @param strExtendableResourceType the str extendable resource type
-     * @param plugin the plugin
+     * @param strIdExtendableResource
+     *            the str id extendable resource
+     * @param strExtendableResourceType
+     *            the str extendable resource type
+     * @param plugin
+     *            the plugin
      * @return the Follow
      */
     Follow loadByResource( String strIdExtendableResource, String strExtendableResourceType, Plugin plugin );
 
     /**
      *
-     * @param filter the filter
-     * @param plugin the plugin
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return List Follow
      */
     List<Follow> loadByFilter( FollowFilter filter, Plugin plugin );

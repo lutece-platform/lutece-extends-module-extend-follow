@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.extend.modules.follow.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-
 /**
  * ICommentDAO.
  */
@@ -43,31 +42,43 @@ public interface IFollowHistoryDAO
 {
     /**
      * Delete.
-     * @param nId the n id follow
-     * @param plugin the plugin
+     * 
+     * @param nId
+     *            the n id follow
+     * @param plugin
+     *            the plugin
      */
     void remove( int nId, Plugin plugin );
 
     /**
      * Delete by resource
      *
-     * @param strIdExtendableResource the str id extendable resource
-     * @param strExtendableResourceType the str extendable resource type
-     * @param plugin the plugin
+     * @param strIdExtendableResource
+     *            the str id extendable resource
+     * @param strExtendableResourceType
+     *            the str extendable resource type
+     * @param plugin
+     *            the plugin
      */
     void removeByResource( String strIdExtendableResource, String strExtendableResourceType, Plugin plugin );
 
     /**
      * Insert.
-     * @param followHistory the followHistory
-     * @param plugin the plugin
+     * 
+     * @param followHistory
+     *            the followHistory
+     * @param plugin
+     *            the plugin
      */
     void create( FollowHistory followHistory, Plugin plugin );
 
     /**
      * Find a {@link FollowHistory}
-     * @param lIdHistoryExtenderId the extender id
-     * @param plugin the plugin
+     * 
+     * @param lIdHistoryExtenderId
+     *            the extender id
+     * @param plugin
+     *            the plugin
      * @return the corresponding {@link FollowHistory}
      */
     FollowHistory findByHistoryExtenderId( long lIdHistoryExtenderId, Plugin plugin );

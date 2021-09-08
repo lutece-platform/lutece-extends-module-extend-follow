@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,7 +67,6 @@ import javax.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * FollowResourceExtenderComponent
@@ -87,8 +86,7 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
      * {@inheritDoc}
      */
     @Override
-    public void buildXmlAddOn( String strIdExtendableResource, String strExtendableResourceType, String strParameters,
-        StringBuffer strXml )
+    public void buildXmlAddOn( String strIdExtendableResource, String strExtendableResourceType, String strParameters, StringBuffer strXml )
     {
         // Nothing yet
     }
@@ -98,15 +96,14 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
      */
     @SuppressWarnings( "deprecation" )
     @Override
-    public String getPageAddOn( String strIdExtendableResource, String strExtendableResourceType, String strParameters,
-        HttpServletRequest request )
+    public String getPageAddOn( String strIdExtendableResource, String strExtendableResourceType, String strParameters, HttpServletRequest request )
     {
-        LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
         Follow follow = _followService.findByResource( strIdExtendableResource, strExtendableResourceType );
         String strTemplateContent = DatabaseTemplateService.getTemplateFromKey( FollowConstants.MARK_EXTEND_FOLLOW );
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         model.put( FollowConstants.MARK_FOLLOW, follow );
         model.put( FollowConstants.MARK_ID_EXTENDABLE_RESOURCE, strIdExtendableResource );
         model.put( FollowConstants.MARK_EXTENDABLE_RESOURCE_TYPE, strExtendableResourceType );
@@ -116,8 +113,7 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
         {
             model.put( FollowConstants.MARK_CAN_FOLLOW, true );
             model.put( FollowConstants.MARK_FOLLOW_CLOSED, false );
-            model.put( FollowConstants.MARK_CAN_DELETE_FOLLOW,
-                isFollower( user, strIdExtendableResource, strExtendableResourceType ) );
+            model.put( FollowConstants.MARK_CAN_DELETE_FOLLOW, isFollower( user, strIdExtendableResource, strExtendableResourceType ) );
         }
         else
         {
@@ -126,11 +122,11 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
         }
 
         model.put( FollowConstants.MARK_FOLLOW_HTML_CONTENT,
-            AppTemplateService.getTemplateFromStringFtl( strTemplateContent, request.getLocale(  ), model ).getHtml(  ) );
+                AppTemplateService.getTemplateFromStringFtl( strTemplateContent, request.getLocale( ), model ).getHtml( ) );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_FOLLOW, request.getLocale(  ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_FOLLOW, request.getLocale( ), model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -141,14 +137,13 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
     {
         if ( resourceExtender != null )
         {
-            Map<String, Object> model = new HashMap<String, Object>(  );
+            Map<String, Object> model = new HashMap<String, Object>( );
             model.put( FollowConstants.MARK_FOLLOW,
-                _followService.findByResource( resourceExtender.getIdExtendableResource(  ),
-                    resourceExtender.getExtendableResourceType(  ) ) );
+                    _followService.findByResource( resourceExtender.getIdExtendableResource( ), resourceExtender.getExtendableResourceType( ) ) );
 
-            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_FOLLOW_INFO, request.getLocale(  ), model );
+            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_FOLLOW_INFO, request.getLocale( ), model );
 
-            return template.getHtml(  );
+            return template.getHtml( );
         }
 
         return StringUtils.EMPTY;
@@ -157,7 +152,8 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
     /**
      * Fetch show parameter.
      *
-     * @param strParameters the str parameters
+     * @param strParameters
+     *            the str parameters
      * @return the string
      */
     private String fetchShowParameter( String strParameters )
@@ -182,20 +178,23 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
 
     /**
      *
-     * @param user the User
-     * @param strIdExtendableResource the IdExtendableResource
-     * @param strExtendableResourceType the ExtendableResourceType
+     * @param user
+     *            the User
+     * @param strIdExtendableResource
+     *            the IdExtendableResource
+     * @param strExtendableResourceType
+     *            the ExtendableResourceType
      * @return if the user is a follower
      */
     private boolean isFollower( LuteceUser user, String strIdExtendableResource, String strExtendableResourceType )
     {
         boolean res = false;
-        ResourceExtenderHistoryFilter filter = new ResourceExtenderHistoryFilter(  );
+        ResourceExtenderHistoryFilter filter = new ResourceExtenderHistoryFilter( );
 
         filter.setExtenderType( FollowResourceExtender.RESOURCE_EXTENDER );
         filter.setExtendableResourceType( strExtendableResourceType );
         filter.setIdExtendableResource( strIdExtendableResource );
-        filter.setUserGuid( user.getName(  ) );
+        filter.setUserGuid( user.getName( ) );
         filter.setAscSort( false );
         filter.setSortedAttributeName( FollowConstants.ORDER_BY_DATE_CREATION );
 
@@ -219,8 +218,7 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
     }
 
     @Override
-    public void doSaveConfig( HttpServletRequest request, IExtenderConfig config )
-        throws ExtendErrorException
+    public void doSaveConfig( HttpServletRequest request, IExtenderConfig config ) throws ExtendErrorException
     {
     }
 }

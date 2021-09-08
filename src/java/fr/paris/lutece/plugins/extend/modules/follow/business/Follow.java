@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.extend.modules.follow.business;
 
 import javax.validation.constraints.NotNull;
 
-
 /**
  *
  * Follow
@@ -53,15 +52,16 @@ public class Follow
     private int _nFollowCount;
 
     /**
-         * @return the nIdFollow
-         */
-    public int getIdFollow(  )
+     * @return the nIdFollow
+     */
+    public int getIdFollow( )
     {
         return _nIdFollow;
     }
 
     /**
-     * @param nIdFollow the nIdFollow to set
+     * @param nIdFollow
+     *            the nIdFollow to set
      */
     public void setIdFollow( int nIdFollow )
     {
@@ -69,15 +69,16 @@ public class Follow
     }
 
     /**
-    * @return the strIdExtendableResource
-    */
-    public String getIdExtendableResource(  )
+     * @return the strIdExtendableResource
+     */
+    public String getIdExtendableResource( )
     {
         return _strIdExtendableResource;
     }
 
     /**
-     * @param strIdExtendableResource the strIdExtendableResource to set
+     * @param strIdExtendableResource
+     *            the strIdExtendableResource to set
      */
     public void setIdExtendableResource( String strIdExtendableResource )
     {
@@ -87,13 +88,14 @@ public class Follow
     /**
      * @return the extendableResourceType
      */
-    public String getExtendableResourceType(  )
+    public String getExtendableResourceType( )
     {
         return _strExtendableResourceType;
     }
 
     /**
-     * @param strExtendableResourceType the extendableResourceType to set
+     * @param strExtendableResourceType
+     *            the extendableResourceType to set
      */
     public void setExtendableResourceType( String strExtendableResourceType )
     {
@@ -103,13 +105,14 @@ public class Follow
     /**
      * @return the nfollowCount
      */
-    public int getFollowCount(  )
+    public int getFollowCount( )
     {
         return _nFollowCount;
     }
 
     /**
-     * @param nfollowCount the nfollowCount to set
+     * @param nfollowCount
+     *            the nfollowCount to set
      */
     public void setFollowCount( int nfollowCount )
     {

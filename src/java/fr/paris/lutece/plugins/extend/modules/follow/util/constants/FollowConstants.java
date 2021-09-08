@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,6 @@
  * License 1.0
  */
 package fr.paris.lutece.plugins.extend.modules.follow.util.constants;
-
 
 /**
  *
@@ -96,7 +95,7 @@ public final class FollowConstants
     /**
      * Instantiates a new comment constants.
      */
-    private FollowConstants(  )
+    private FollowConstants( )
     {
     }
 }

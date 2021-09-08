@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * IFollowService.
  */
@@ -52,7 +51,8 @@ public interface IFollowService
     /**
      * Delete.
      *
-     * @param nIdFollow the nId follow
+     * @param nIdFollow
+     *            the nId follow
      */
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void remove( int nIdFollow );
@@ -60,8 +60,10 @@ public interface IFollowService
     /**
      * Delete by resource
      *
-     * @param strIdExtendableResource the str id extendable resource
-     * @param strExtendableResourceType the str extendable resource type
+     * @param strIdExtendableResource
+     *            the str id extendable resource
+     * @param strExtendableResourceType
+     *            the str extendable resource type
      */
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void removeByResource( String strIdExtendableResource, String strExtendableResourceType );
@@ -69,7 +71,8 @@ public interface IFollowService
     /**
      * Insert.
      *
-     * @param follow the follow
+     * @param follow
+     *            the follow
      */
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void create( Follow follow );
@@ -77,7 +80,8 @@ public interface IFollowService
     /**
      * Store.
      *
-     * @param follow the follow
+     * @param follow
+     *            the follow
      */
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void update( Follow follow );
@@ -85,29 +89,37 @@ public interface IFollowService
     /**
      * Increment vote.
      *
-     * @param strIdExtendableResource the str id extendable resource
-     * @param strExtendableResourceType the str extendable resource type
-     * @param nVoteValue the n vote value
-     * @param request the request
+     * @param strIdExtendableResource
+     *            the str id extendable resource
+     * @param strExtendableResourceType
+     *            the str extendable resource type
+     * @param nVoteValue
+     *            the n vote value
+     * @param request
+     *            the request
      */
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
-    void doFollow( String strIdExtendableResource, String strExtendableResourceType, int nVoteValue,
-        HttpServletRequest request );
+    void doFollow( String strIdExtendableResource, String strExtendableResourceType, int nVoteValue, HttpServletRequest request );
 
     /**
      * Do cancel the vote of a user
-     * @param user The user
-     * @param strIdExtendableResource The id of the extendable resource
-     * @param strExtendableResourceType The extendable resource type
-     * @param request the request
+     * 
+     * @param user
+     *            The user
+     * @param strIdExtendableResource
+     *            The id of the extendable resource
+     * @param strExtendableResourceType
+     *            The extendable resource type
+     * @param request
+     *            the request
      */
-    void doCancelFollow( LuteceUser user, String strIdExtendableResource, String strExtendableResourceType,
-            HttpServletRequest request );
+    void doCancelFollow( LuteceUser user, String strIdExtendableResource, String strExtendableResourceType, HttpServletRequest request );
 
     /**
      * Load.
      *
-     * @param nIdFollow the n id follow
+     * @param nIdFollow
+     *            the n id follow
      * @return the follow
      */
     Follow findByPrimaryKey( int nIdFollow );
@@ -115,15 +127,19 @@ public interface IFollowService
     /**
      * Select by resource.
      *
-     * @param strIdExtendableResource the str id extendable resource
-     * @param strExtendableResourceType the str extendable resource type
+     * @param strIdExtendableResource
+     *            the str id extendable resource
+     * @param strExtendableResourceType
+     *            the str extendable resource type
      * @return the follow
      */
     Follow findByResource( String strIdExtendableResource, String strExtendableResourceType );
 
     /**
      * Find by filter
-     * @param filter the filter
+     * 
+     * @param filter
+     *            the filter
      * @return list Follow by filter
      */
     List<Follow> findByFilter( FollowFilter filter );

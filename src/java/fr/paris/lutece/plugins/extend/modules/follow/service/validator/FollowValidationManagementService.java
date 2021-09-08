@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,6 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Service to manage follow validation
  */
@@ -48,22 +47,24 @@ public final class FollowValidationManagementService
 {
     /**
      * Check if a user is allowed to validate a resource
-     * @param request The request
-     * @param user The user that wants to rate a resource
-     * @param strIdResource the id of the resource
-     * @param strResourceTypeKey The resource type key
-     * @param nVoteValue The vote value
-     * @return The URL to redirect the user if he is not allowed to rate the
-     *         resource, or null if he is allowed
+     * 
+     * @param request
+     *            The request
+     * @param user
+     *            The user that wants to rate a resource
+     * @param strIdResource
+     *            the id of the resource
+     * @param strResourceTypeKey
+     *            The resource type key
+     * @param nVoteValue
+     *            The vote value
+     * @return The URL to redirect the user if he is not allowed to rate the resource, or null if he is allowed
      */
-    public static String validateFollow( HttpServletRequest request, LuteceUser user, String strIdResource,
-        String strResourceTypeKey, int nVoteValue )
+    public static String validateFollow( HttpServletRequest request, LuteceUser user, String strIdResource, String strResourceTypeKey, int nVoteValue )
     {
-        for ( IFollowValidationService validationService : SpringContextService.getBeansOfType( 
-                IFollowValidationService.class ) )
+        for ( IFollowValidationService validationService : SpringContextService.getBeansOfType( IFollowValidationService.class ) )
         {
-            String strUrlError = validationService.validateFollow( request, user, strIdResource, strResourceTypeKey,
-                    nVoteValue );
+            String strUrlError = validationService.validateFollow( request, user, strIdResource, strResourceTypeKey, nVoteValue );
 
             if ( StringUtils.isNotBlank( strUrlError ) )
             {

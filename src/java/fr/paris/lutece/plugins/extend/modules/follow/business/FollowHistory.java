@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.extend.modules.follow.business;
 
-
 /**
  *
  * Follow
@@ -48,13 +47,14 @@ public class FollowHistory
     /**
      * @return the _nIdFollowHistory
      */
-    public int getIdFollowHistory(  )
+    public int getIdFollowHistory( )
     {
         return _nIdFollowHistory;
     }
 
     /**
-     * @param nIdFollowHistory the _nIdFollowHistory to set
+     * @param nIdFollowHistory
+     *            the _nIdFollowHistory to set
      */
     public void setIdFollowHistory( int nIdFollowHistory )
     {
@@ -64,13 +64,14 @@ public class FollowHistory
     /**
      * @return the _nIdExtenderHistory
      */
-    public long getIdExtenderHistory(  )
+    public long getIdExtenderHistory( )
     {
         return _lIdExtenderHistory;
     }
 
     /**
-     * @param lIdExtenderHistory the _nIdExtenderHistory to set
+     * @param lIdExtenderHistory
+     *            the _nIdExtenderHistory to set
      */
     public void setIdExtenderHistory( long lIdExtenderHistory )
     {
@@ -80,13 +81,14 @@ public class FollowHistory
     /**
      * @return the _nFollowValue
      */
-    public int getFollowValue(  )
+    public int getFollowValue( )
     {
         return _nFollowValue;
     }
 
     /**
-     * @param nFollowValue the _nFollowValue to set
+     * @param nFollowValue
+     *            the _nFollowValue to set
      */
     public void setFollowValue( int nFollowValue )
     {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.extend.modules.follow.business.FollowHistory;
 
 import org.springframework.transaction.annotation.Transactional;
 
-
 /**
  * IFollowService.
  */
@@ -46,7 +45,8 @@ public interface IFollowHistoryService
     /**
      * Delete.
      *
-     * @param nId the n id Follow
+     * @param nId
+     *            the n id Follow
      */
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void remove( int nId );
@@ -54,22 +54,28 @@ public interface IFollowHistoryService
     /**
      * Delete by resource
      *
-     * @param strIdExtendableResource the str id extendable resource
-     * @param strExtendableResourceType the str extendable resource type
+     * @param strIdExtendableResource
+     *            the str id extendable resource
+     * @param strExtendableResourceType
+     *            the str extendable resource type
      */
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void removeByResource( String strIdExtendableResource, String strExtendableResourceType );
 
     /**
      * Insert.
-     * @param followHistory the FollowHistory
+     * 
+     * @param followHistory
+     *            the FollowHistory
      */
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void create( FollowHistory followHistory );
 
     /**
      * Find a {@link FollowHistory}
-     * @param lIdHistoryExtenderId the extender id
+     * 
+     * @param lIdHistoryExtenderId
+     *            the extender id
      * @return the corresponding {@link FollowHistory}
      */
     @Transactional( FollowPlugin.TRANSACTION_MANAGER )

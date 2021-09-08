@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,39 +36,39 @@ package fr.paris.lutece.plugins.extend.modules.follow.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  * This class provides Data Access methods for Follow objects.
  */
 public class FollowHistoryDAO implements IFollowHistoryDAO
 {
     private static final String SQL_QUERY_NEW_PK = " SELECT max( id_follow_history ) FROM extend_follow_history ";
-    private static final String SQL_QUERY_INSERT = " INSERT INTO extend_follow_history ( id_follow_history, id_extender_history, follow_value ) " +
-        " VALUES ( ?, ?, ? ) ";
+    private static final String SQL_QUERY_INSERT = " INSERT INTO extend_follow_history ( id_follow_history, id_extender_history, follow_value ) "
+            + " VALUES ( ?, ?, ? ) ";
     private static final String SQL_QUERY_FIND_BY_EXTENDER_HISTORY_ID = " SELECT id_follow_history, id_extender_history, follow_value FROM extend_follow_history WHERE id_extender_history = ?";
-    private static final String SQL_QUERY_DELETE_BY_RESOURCE = " DELETE FROM extend_follow_history WHERE id_follow_history " +
-        "IN (SELECT id_history FROM extend_resource_extender_history WHERE extender_type = ? AND resource_type = ?)";
+    private static final String SQL_QUERY_DELETE_BY_RESOURCE = " DELETE FROM extend_follow_history WHERE id_follow_history "
+            + "IN (SELECT id_history FROM extend_resource_extender_history WHERE extender_type = ? AND resource_type = ?)";
     private static final String SQL_QUERY_DELETE = " DELETE FROM extend_follow_history WHERE id_follow_history = ? ";
 
     /**
      * Generates a new primary key.
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return The new primary key
      */
     private int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey = 1;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             nKey = daoUtil.getInt( 1 ) + 1;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
@@ -78,8 +78,8 @@ public class FollowHistoryDAO implements IFollowHistoryDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     @Override
@@ -88,8 +88,8 @@ public class FollowHistoryDAO implements IFollowHistoryDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_RESOURCE, plugin );
         daoUtil.setString( 1, strIdExtendableResource );
         daoUtil.setString( 2, strExtendableResourceType );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     @Override
@@ -100,12 +100,12 @@ public class FollowHistoryDAO implements IFollowHistoryDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         int nIndex = 1;
 
-        daoUtil.setInt( nIndex++, followHistory.getIdFollowHistory(  ) );
-        daoUtil.setLong( nIndex++, followHistory.getIdExtenderHistory(  ) );
-        daoUtil.setInt( nIndex++, followHistory.getFollowValue(  ) );
+        daoUtil.setInt( nIndex++, followHistory.getIdFollowHistory( ) );
+        daoUtil.setLong( nIndex++, followHistory.getIdExtenderHistory( ) );
+        daoUtil.setInt( nIndex++, followHistory.getFollowValue( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     @Override
@@ -115,19 +115,19 @@ public class FollowHistoryDAO implements IFollowHistoryDAO
 
         daoUtil.setLong( 1, lIdHistoryExtenderId );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         FollowHistory followHistory = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            followHistory = new FollowHistory(  );
+            followHistory = new FollowHistory( );
             followHistory.setIdFollowHistory( daoUtil.getInt( 1 ) );
             followHistory.setIdExtenderHistory( daoUtil.getLong( 2 ) );
             followHistory.setFollowValue( daoUtil.getInt( 3 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return followHistory;
     }

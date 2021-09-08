@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,14 +45,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  *
  * FeedbackInstallerPluginAction
  *
  */
-public class FollowInstallerPluginAction extends AbstractPluginAction<IExtendableResource>
-    implements IExtendableResourcePluginAction
+public class FollowInstallerPluginAction extends AbstractPluginAction<IExtendableResource> implements IExtendableResourcePluginAction
 {
     private static final String ACTION_NAME = "Follow";
 
@@ -80,7 +78,7 @@ public class FollowInstallerPluginAction extends AbstractPluginAction<IExtendabl
      * {@inheritDoc}
      */
     @Override
-    public String getButtonTemplate(  )
+    public String getButtonTemplate( )
     {
         return TEMPLATE_BUTTON;
     }
@@ -89,7 +87,7 @@ public class FollowInstallerPluginAction extends AbstractPluginAction<IExtendabl
      * {@inheritDoc}
      */
     @Override
-    public String getName(  )
+    public String getName( )
     {
         return ACTION_NAME;
     }
@@ -98,8 +96,8 @@ public class FollowInstallerPluginAction extends AbstractPluginAction<IExtendabl
      * {@inheritDoc}
      */
     @Override
-    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser,
-        IExtendableResource sessionFields ) throws AccessDeniedException
+    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser, IExtendableResource sessionFields )
+            throws AccessDeniedException
     {
         return null;
     }

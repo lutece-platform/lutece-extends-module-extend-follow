@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 
-
 /**
  *
  * Follower filter
@@ -68,7 +67,7 @@ public class FollowFilter implements Serializable
     /**
      * CONSTRUCTOR INIT
      */
-    public FollowFilter(  )
+    public FollowFilter( )
     {
         _nIdFollow = ALL;
         _strIdExtendableResource = StringUtils.EMPTY;
@@ -78,16 +77,19 @@ public class FollowFilter implements Serializable
 
     /**
      * Get Id ExtendableResource
+     * 
      * @return Id ExtendableResource
      */
-    public String getIdExtendableResource(  )
+    public String getIdExtendableResource( )
     {
         return _strIdExtendableResource;
     }
 
     /**
      * Set Id ExtendableResource
-     * @param strIdExtendableResource the Id ExtendableResource
+     * 
+     * @param strIdExtendableResource
+     *            the Id ExtendableResource
      */
     public void setIdExtendableResource( String strIdExtendableResource )
     {
@@ -95,17 +97,20 @@ public class FollowFilter implements Serializable
     }
 
     /**
-     *  GET ExtendableResourceType
+     * GET ExtendableResourceType
+     * 
      * @return Extendable Resource Type
      */
-    public String getExtendableResourceType(  )
+    public String getExtendableResourceType( )
     {
         return _strExtendableResourceType;
     }
 
     /**
      * SET the extendable resource type
-     * @param strExtendableResourceType the resource type
+     * 
+     * @param strExtendableResourceType
+     *            the resource type
      */
     public void setExtendableResourceType( String strExtendableResourceType )
     {
@@ -114,16 +119,19 @@ public class FollowFilter implements Serializable
 
     /**
      * Get Id follow
+     * 
      * @return Id follow
      */
-    public int getIdFollow(  )
+    public int getIdFollow( )
     {
         return _nIdFollow;
     }
 
     /**
      * Set the Id follow
-     * @param nIdFollow Id follow
+     * 
+     * @param nIdFollow
+     *            Id follow
      */
     public void setIdFollow( int nIdFollow )
     {
@@ -131,51 +139,52 @@ public class FollowFilter implements Serializable
     }
 
     /**
-     * Check if the filter is applied to a wide search or not.
-     * <br/>
+     * Check if the filter is applied to a wide search or not. <br/>
      * In other words, the SQL query will use
      * <ul>
      * <li>SQL <b>OR</b> if it is applied to a wide search</li>
      * <li>SQL <b>AND</b> if it is not applied to a wide search</li>
      * </ul>
+     * 
      * @return true if it is applied to a wide search
      */
-    public boolean isWideSearch(  )
+    public boolean isWideSearch( )
     {
         return _bIsWideSearch;
     }
 
     /**
-      * Set true if the filter is applied to a wide search.
-      * <br/>
-      * In other words, the SQL query will use
-      * <ul>
-      * <li>SQL <b>OR</b> if it is applied to a wide search</li>
-      * <li>SQL <b>AND</b> if it is not applied to a wide search</li>
-      * </ul>
-      * @param bIsWideSearch true if it a wide search, false otherwise
-      */
+     * Set true if the filter is applied to a wide search. <br/>
+     * In other words, the SQL query will use
+     * <ul>
+     * <li>SQL <b>OR</b> if it is applied to a wide search</li>
+     * <li>SQL <b>AND</b> if it is not applied to a wide search</li>
+     * </ul>
+     * 
+     * @param bIsWideSearch
+     *            true if it a wide search, false otherwise
+     */
     public void setIsWideSearch( boolean bIsWideSearch )
     {
         this._bIsWideSearch = bIsWideSearch;
     }
 
     /**
-    * Contains IdFollow.
-    *
-    * @return true, if successful
-    */
-    public boolean containsIdFollow(  )
+     * Contains IdFollow.
+     *
+     * @return true, if successful
+     */
+    public boolean containsIdFollow( )
     {
         return _nIdFollow != ALL;
     }
 
     /**
-    * Contains Id ExtendableResource.
-    *
-    * @return true, if successful
-    */
-    public boolean containsIdExtendableResource(  )
+     * Contains Id ExtendableResource.
+     *
+     * @return true, if successful
+     */
+    public boolean containsIdExtendableResource( )
     {
         return StringUtils.isNotBlank( _strIdExtendableResource );
     }
@@ -185,7 +194,7 @@ public class FollowFilter implements Serializable
      *
      * @return true, if successful
      */
-    public boolean containsExtendableResourceType(  )
+    public boolean containsExtendableResourceType( )
     {
         return StringUtils.isNotBlank( _strExtendableResourceType );
     }
@@ -193,10 +202,14 @@ public class FollowFilter implements Serializable
     /**
      * Builds the filter.
      *
-     * @param sbSQL the sb sql
-     * @param bAddFilter the b add filter
-     * @param strSQL the str sql
-     * @param nIndex the n index
+     * @param sbSQL
+     *            the sb sql
+     * @param bAddFilter
+     *            the b add filter
+     * @param strSQL
+     *            the str sql
+     * @param nIndex
+     *            the n index
      * @return the int
      */
     private int buildFilter( StringBuilder sbSQL, boolean bAddFilter, String strSQL, int nIndex )
@@ -205,7 +218,7 @@ public class FollowFilter implements Serializable
 
         if ( bAddFilter )
         {
-            nIndexTmp = addSQLWhereOr( isWideSearch(  ), sbSQL, nIndex );
+            nIndexTmp = addSQLWhereOr( isWideSearch( ), sbSQL, nIndex );
             sbSQL.append( strSQL );
         }
 
@@ -213,15 +226,18 @@ public class FollowFilter implements Serializable
     }
 
     /**
-     * Add a <b>WHERE</b> or a <b>OR</b> depending of the index.
-     * <br/>
+     * Add a <b>WHERE</b> or a <b>OR</b> depending of the index. <br/>
      * <ul>
      * <li>if <code>nIndex</code> == 1, then we add a <b>WHERE</b></li>
      * <li>if <code>nIndex</code> != 1, then we add a <b>OR</b> or a <b>AND</b> depending of the wide search characteristic</li>
      * </ul>
-     * @param bIsWideSearch true if it is a wide search, false otherwise
-     * @param sbSQL the SQL query
-     * @param nIndex the index
+     * 
+     * @param bIsWideSearch
+     *            true if it is a wide search, false otherwise
+     * @param sbSQL
+     *            the SQL query
+     * @param nIndex
+     *            the index
      * @return the new index
      */
     private int addSQLWhereOr( boolean bIsWideSearch, StringBuilder sbSQL, int nIndex )
@@ -239,45 +255,47 @@ public class FollowFilter implements Serializable
     }
 
     /**
-    * Builds the sql query.
-    *
-    * @param strSQL the str sql
-    * @return the string
-    */
+     * Builds the sql query.
+     *
+     * @param strSQL
+     *            the str sql
+     * @return the string
+     */
     public String buildSQLQuery( String strSQL )
     {
         StringBuilder sbSQL = new StringBuilder( strSQL );
         int nIndex = 1;
 
-        nIndex = buildFilter( sbSQL, containsIdFollow(  ), SQL_FILTER_ID_FOLLOW, nIndex );
-        nIndex = buildFilter( sbSQL, containsIdExtendableResource(  ), SQL_FILTER_ID_RESOURCE, nIndex );
-        buildFilter( sbSQL, containsExtendableResourceType(  ), SQL_FILTER_RESOURCE_TYPE, nIndex );
+        nIndex = buildFilter( sbSQL, containsIdFollow( ), SQL_FILTER_ID_FOLLOW, nIndex );
+        nIndex = buildFilter( sbSQL, containsIdExtendableResource( ), SQL_FILTER_ID_RESOURCE, nIndex );
+        buildFilter( sbSQL, containsExtendableResourceType( ), SQL_FILTER_RESOURCE_TYPE, nIndex );
 
-        return sbSQL.toString(  );
+        return sbSQL.toString( );
     }
 
     /**
      * Sets the filter values.
      *
-     * @param daoUtil the new filter values
+     * @param daoUtil
+     *            the new filter values
      */
     public void setFilterValues( DAOUtil daoUtil )
     {
         int nIndex = 1;
 
-        if ( containsIdFollow(  ) )
+        if ( containsIdFollow( ) )
         {
-            daoUtil.setInt( nIndex++, getIdFollow(  ) );
+            daoUtil.setInt( nIndex++, getIdFollow( ) );
         }
 
-        if ( containsIdExtendableResource(  ) )
+        if ( containsIdExtendableResource( ) )
         {
-            daoUtil.setString( nIndex++, getIdExtendableResource(  ) );
+            daoUtil.setString( nIndex++, getIdExtendableResource( ) );
         }
 
-        if ( containsExtendableResourceType(  ) )
+        if ( containsExtendableResourceType( ) )
         {
-            daoUtil.setString( nIndex++, getExtendableResourceType(  ) );
+            daoUtil.setString( nIndex++, getExtendableResourceType( ) );
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@ import fr.paris.lutece.plugins.extend.modules.follow.business.IFollowHistoryDAO;
 
 import javax.inject.Inject;
 
-
 /**
  *
  * followService
@@ -54,25 +53,24 @@ public class FollowHistoryService implements IFollowHistoryService
     @Override
     public void remove( int nId )
     {
-        _followHistoryDAO.remove( nId, FollowPlugin.getPlugin(  ) );
+        _followHistoryDAO.remove( nId, FollowPlugin.getPlugin( ) );
     }
 
     @Override
     public void removeByResource( String strIdExtendableResource, String strExtendableResourceType )
     {
-        _followHistoryDAO.removeByResource( strIdExtendableResource, strExtendableResourceType,
-            FollowPlugin.getPlugin(  ) );
+        _followHistoryDAO.removeByResource( strIdExtendableResource, strExtendableResourceType, FollowPlugin.getPlugin( ) );
     }
 
     @Override
     public void create( FollowHistory followHistory )
     {
-        _followHistoryDAO.create( followHistory, FollowPlugin.getPlugin(  ) );
+        _followHistoryDAO.create( followHistory, FollowPlugin.getPlugin( ) );
     }
 
     @Override
     public FollowHistory findByHistoryExtenderId( long lIdHistoryExtenderId )
     {
-        return _followHistoryDAO.findByHistoryExtenderId( lIdHistoryExtenderId, FollowPlugin.getPlugin(  ) );
+        return _followHistoryDAO.findByHistoryExtenderId( lIdHistoryExtenderId, FollowPlugin.getPlugin( ) );
     }
 }

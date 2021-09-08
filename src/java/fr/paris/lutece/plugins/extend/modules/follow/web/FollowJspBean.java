@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  * FollowJspBean
  */
@@ -80,35 +79,34 @@ public class FollowJspBean
     private IFollowService _followService = SpringContextService.getBean( FollowService.BEAN_SERVICE );
 
     /**
-     * Update the follow value an count.
-     * This method is called in FO by the following JSP :
-     * <strong>jsp/site/plugins/extend/modules/follow/DoFollow.Jsp</strong>
+     * Update the follow value an count. This method is called in FO by the following JSP : <strong>jsp/site/plugins/extend/modules/follow/DoFollow.Jsp</strong>
      *
-     * @param request The HTTP request
-     * @param response The HTTP response
-     * @throws IOException the io exception
-     * @throws SiteMessageException the site message exception
-     * @throws UserNotSignedException If the user has not signed in
+     * @param request
+     *            The HTTP request
+     * @param response
+     *            The HTTP response
+     * @throws IOException
+     *             the io exception
+     * @throws SiteMessageException
+     *             the site message exception
+     * @throws UserNotSignedException
+     *             If the user has not signed in
      */
-    public void doFollow( HttpServletRequest request, HttpServletResponse response )
-        throws IOException, SiteMessageException, UserNotSignedException
+    public void doFollow( HttpServletRequest request, HttpServletResponse response ) throws IOException, SiteMessageException, UserNotSignedException
     {
         String strIdExtendableResource = request.getParameter( FollowConstants.PARAMETER_ID_EXTENDABLE_RESOURCE );
         String strExtendableResourceType = request.getParameter( FollowConstants.PARAMETER_EXTENDABLE_RESOURCE_TYPE );
         String strFollowValue = request.getParameter( FollowConstants.PARAMETER_FOLLOW_VALUE );
-        String strFromUrl = (String) request.getSession(  )
-                                            .getAttribute( ExtendPlugin.PLUGIN_NAME +
-                FollowConstants.PARAMETER_FROM_URL );
+        String strFromUrl = (String) request.getSession( ).getAttribute( ExtendPlugin.PLUGIN_NAME + FollowConstants.PARAMETER_FROM_URL );
 
-        if ( StringUtils.isBlank( strIdExtendableResource ) || StringUtils.isBlank( strExtendableResourceType ) ||
-                StringUtils.isBlank( strFollowValue ) )
+        if ( StringUtils.isBlank( strIdExtendableResource ) || StringUtils.isBlank( strExtendableResourceType ) || StringUtils.isBlank( strFollowValue ) )
         {
             SiteMessageService.setMessage( request, FollowConstants.MESSAGE_ERROR_GENERIC_MESSAGE, SiteMessage.TYPE_STOP );
         }
 
         String strSessionKeyNextUrl = getSessionKeyUrlRedirect( strIdExtendableResource, strExtendableResourceType );
 
-        String strNextUrl = (String) request.getSession(  ).getAttribute( strSessionKeyNextUrl );
+        String strNextUrl = (String) request.getSession( ).getAttribute( strSessionKeyNextUrl );
 
         if ( StringUtils.isEmpty( strNextUrl ) )
         {
@@ -121,22 +119,22 @@ public class FollowJspBean
                 if ( StringUtils.isNotEmpty( strFromUrl ) )
                 {
                     strFromUrl = strFromUrl.replaceAll( "%", "%25" );
-                    if ( !url.getUrl(  ).contains(  FollowConstants.PARAMETER_FROM_URL ) )
+                    if ( !url.getUrl( ).contains( FollowConstants.PARAMETER_FROM_URL ) )
                     {
                         url.addParameter( FollowConstants.PARAMETER_FROM_URL, strFromUrl );
                     }
                 }
 
-                strNextUrl = url.getUrl(  );
+                strNextUrl = url.getUrl( );
             }
             else
             {
-                strNextUrl = AppPathService.getPortalUrl(  );
+                strNextUrl = AppPathService.getPortalUrl( );
             }
         }
         else
         {
-            request.getSession(  ).removeAttribute( strSessionKeyNextUrl );
+            request.getSession( ).removeAttribute( strSessionKeyNextUrl );
         }
 
         int nFollowValue = 0;
@@ -145,14 +143,13 @@ public class FollowJspBean
         {
             nFollowValue = Integer.parseInt( strFollowValue );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             SiteMessageService.setMessage( request, FollowConstants.MESSAGE_ERROR_GENERIC_MESSAGE, SiteMessage.TYPE_STOP );
         }
 
-        String strErrorUrl = FollowValidationManagementService.validateFollow( request,
-                SecurityService.getInstance(  ).getRemoteUser( request ), strIdExtendableResource,
-                strExtendableResourceType, nFollowValue );
+        String strErrorUrl = FollowValidationManagementService.validateFollow( request, SecurityService.getInstance( ).getRemoteUser( request ),
+                strIdExtendableResource, strExtendableResourceType, nFollowValue );
 
         if ( StringUtils.isNotEmpty( strErrorUrl ) )
         {
@@ -161,67 +158,68 @@ public class FollowJspBean
                 strErrorUrl = AppPathService.getBaseUrl( request ) + strErrorUrl;
             }
 
-            request.getSession(  ).setAttribute( strSessionKeyNextUrl, strNextUrl );
+            request.getSession( ).setAttribute( strSessionKeyNextUrl, strNextUrl );
 
             response.sendRedirect( strErrorUrl );
 
             return;
         }
 
-        ResourceExtenderHistoryFilter filter = new ResourceExtenderHistoryFilter(  );
+        ResourceExtenderHistoryFilter filter = new ResourceExtenderHistoryFilter( );
 
         filter.setExtenderType( FollowResourceExtender.RESOURCE_EXTENDER );
-        filter.setUserGuid( SecurityService.getInstance(  ).getRemoteUser( request ).getName(  ) );
+        filter.setUserGuid( SecurityService.getInstance( ).getRemoteUser( request ).getName( ) );
         filter.setExtendableResourceType( strExtendableResourceType );
         filter.setIdExtendableResource( strIdExtendableResource );
-        
-        List<ResourceExtenderHistory> listHistories = _resourceExtenderHistoryService.findByFilter( filter ); 
-        
-        if( listHistories.isEmpty( ) )
+
+        List<ResourceExtenderHistory> listHistories = _resourceExtenderHistoryService.findByFilter( filter );
+
+        if ( listHistories.isEmpty( ) )
         {
-        	if ( FollowListenerService.canFollow( strExtendableResourceType, strIdExtendableResource, SecurityService.getInstance(  ).getRemoteUser( request ) ) )
-        	{
-        		_followService.doFollow( strIdExtendableResource, strExtendableResourceType, nFollowValue, request );
-        	}
-        	else
+            if ( FollowListenerService.canFollow( strExtendableResourceType, strIdExtendableResource,
+                    SecurityService.getInstance( ).getRemoteUser( request ) ) )
             {
-            	SiteMessageService.setMessage( request, FollowConstants.MESSAGE_PHASE_IS_CLOSE, SiteMessage.TYPE_STOP );
+                _followService.doFollow( strIdExtendableResource, strExtendableResourceType, nFollowValue, request );
+            }
+            else
+            {
+                SiteMessageService.setMessage( request, FollowConstants.MESSAGE_PHASE_IS_CLOSE, SiteMessage.TYPE_STOP );
             }
         }
-        
+
         response.sendRedirect( strNextUrl );
     }
 
     /**
-     * Cancel the follow value
-     * This method is called in FO by the following JSP :
-     * <strong>jsp/site/plugins/extend/modules/follow/DoCancelFollow.Jsp</strong>
-     * @param request The HTTP request
-     * @param response The HTTP response
-     * @throws IOException the io exception
-     * @throws SiteMessageException the site message exception
+     * Cancel the follow value This method is called in FO by the following JSP : <strong>jsp/site/plugins/extend/modules/follow/DoCancelFollow.Jsp</strong>
+     * 
+     * @param request
+     *            The HTTP request
+     * @param response
+     *            The HTTP response
+     * @throws IOException
+     *             the io exception
+     * @throws SiteMessageException
+     *             the site message exception
      */
-    public void doCancelFollow( HttpServletRequest request, HttpServletResponse response )
-        throws IOException, SiteMessageException
+    public void doCancelFollow( HttpServletRequest request, HttpServletResponse response ) throws IOException, SiteMessageException
     {
         String strIdExtendableResource = request.getParameter( FollowConstants.PARAMETER_ID_EXTENDABLE_RESOURCE );
         String strExtendableResourceType = request.getParameter( FollowConstants.PARAMETER_EXTENDABLE_RESOURCE_TYPE );
-        String strFromUrl = (String) request.getSession(  )
-                                            .getAttribute( ExtendPlugin.PLUGIN_NAME +
-                FollowConstants.PARAMETER_FROM_URL );
-        LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+        String strFromUrl = (String) request.getSession( ).getAttribute( ExtendPlugin.PLUGIN_NAME + FollowConstants.PARAMETER_FROM_URL );
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
         if ( StringUtils.isBlank( strIdExtendableResource ) || StringUtils.isBlank( strExtendableResourceType ) )
         {
             SiteMessageService.setMessage( request, FollowConstants.MESSAGE_ERROR_GENERIC_MESSAGE, SiteMessage.TYPE_STOP );
         }
         if ( FollowListenerService.canFollow( strExtendableResourceType, strIdExtendableResource, user ) )
-    	{
-        	_followService.doCancelFollow( user, strIdExtendableResource, strExtendableResourceType,request);
-    	}
+        {
+            _followService.doCancelFollow( user, strIdExtendableResource, strExtendableResourceType, request );
+        }
         else
         {
-        	SiteMessageService.setMessage( request, FollowConstants.MESSAGE_PHASE_IS_CLOSE, SiteMessage.TYPE_STOP );
+            SiteMessageService.setMessage( request, FollowConstants.MESSAGE_PHASE_IS_CLOSE, SiteMessage.TYPE_STOP );
         }
         String strReferer = request.getHeader( FollowConstants.PARAMETER_HTTP_REFERER );
 
@@ -232,25 +230,27 @@ public class FollowJspBean
             if ( StringUtils.isNotEmpty( strFromUrl ) )
             {
                 strFromUrl = strFromUrl.replaceAll( "%", "%25" );
-                if ( !url.getUrl(  ).contains(  FollowConstants.PARAMETER_FROM_URL ) )
+                if ( !url.getUrl( ).contains( FollowConstants.PARAMETER_FROM_URL ) )
                 {
                     url.addParameter( FollowConstants.PARAMETER_FROM_URL, strFromUrl );
                 }
             }
 
-            response.sendRedirect( url.getUrl(  ) );
+            response.sendRedirect( url.getUrl( ) );
         }
         else
         {
-            response.sendRedirect( AppPathService.getPortalUrl(  ) );
+            response.sendRedirect( AppPathService.getPortalUrl( ) );
         }
     }
 
     /**
-     * Get the session key of the URL to redirect the user to after he has followd
-     * for the resource
-     * @param strIdResource The id of the resource
-     * @param strResourceType The type of the resource
+     * Get the session key of the URL to redirect the user to after he has followd for the resource
+     * 
+     * @param strIdResource
+     *            The id of the resource
+     * @param strResourceType
+     *            The type of the resource
      * @return The session key
      */
     public static String getSessionKeyUrlRedirect( String strIdResource, String strResourceType )
