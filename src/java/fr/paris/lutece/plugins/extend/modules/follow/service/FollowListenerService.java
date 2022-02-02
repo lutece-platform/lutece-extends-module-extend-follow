@@ -39,15 +39,20 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowListener;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 
 public class FollowListenerService
 {
 
-    private static Map<String, List<IFollowListener>> _mapListeners = new HashMap<String, List<IFollowListener>>( );
+    private static Map<String, List<IFollowListener>> _mapListeners = new HashMap< >( );
     private static boolean _bHasListeners;
 
+    /**
+     * Private constructor
+     */
+    private FollowListenerService() {
+    	
+    }
     /**
      * Register a comment listener.
      * 
@@ -62,7 +67,7 @@ public class FollowListenerService
         List<IFollowListener> listListeners = _mapListeners.get( strExtendableResourceType );
         if ( listListeners == null )
         {
-            listListeners = new ArrayList<IFollowListener>( );
+            listListeners = new ArrayList< >( );
             _mapListeners.put( strExtendableResourceType, listListeners );
         }
         listListeners.add( listener );
@@ -128,15 +133,16 @@ public class FollowListenerService
     public static boolean canFollow( String strExtendableResourceType, String strIdExtendableResource, LuteceUser user )
     {
         List<IFollowListener> listListeners = _mapListeners.get( strExtendableResourceType );
-        boolean res = false;
         if ( listListeners != null )
         {
             for ( IFollowListener listener : listListeners )
             {
-                return listener.canFollow( strExtendableResourceType, strIdExtendableResource, user );
+            	if( !listener.canFollow( strExtendableResourceType, strIdExtendableResource, user )) {
+            		return false;
+            	}
             }
         }
-        return res;
+        return true;
     }
 
 }
