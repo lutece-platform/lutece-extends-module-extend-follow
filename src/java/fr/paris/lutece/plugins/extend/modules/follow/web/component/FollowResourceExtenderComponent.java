@@ -38,7 +38,6 @@ import fr.paris.lutece.plugins.extend.business.extender.config.IExtenderConfig;
 import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistory;
 import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistoryFilter;
 import fr.paris.lutece.plugins.extend.modules.follow.business.Follow;
-import fr.paris.lutece.plugins.extend.modules.follow.business.FollowFilter;
 import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.extender.FollowResourceExtender;
 import fr.paris.lutece.plugins.extend.modules.follow.util.constants.FollowConstants;
@@ -56,7 +55,7 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;

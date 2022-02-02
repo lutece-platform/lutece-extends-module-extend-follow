@@ -35,9 +35,10 @@ package fr.paris.lutece.plugins.extend.modules.follow.business;
 
 import fr.paris.lutece.util.sql.DAOUtil;
 
-import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *

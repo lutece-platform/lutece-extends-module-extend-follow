@@ -38,12 +38,13 @@ import fr.paris.lutece.plugins.extend.modules.follow.service.FollowService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
 import fr.paris.lutece.plugins.extend.service.extender.AbstractResourceExtender;
 
-import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * FollowResourceExtender

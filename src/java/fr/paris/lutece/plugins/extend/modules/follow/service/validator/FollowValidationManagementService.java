@@ -36,9 +36,10 @@ package fr.paris.lutece.plugins.extend.modules.follow.service.validator;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Service to manage follow validation
