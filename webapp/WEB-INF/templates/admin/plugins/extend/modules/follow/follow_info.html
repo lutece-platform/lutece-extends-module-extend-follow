@@ -1,8 +1,13 @@
 <#if follow??>
-	<@p>
-		<strong>followers:</strong>
-		${follow.followCount!}
-	</@p>
-
-	<br />
+    <@row>
+		<@columns>
+            <@p><strong>Nombre de suivi:</strong> ${follow.followCount!}</@p>
+        </@columns>
+    </@row>
+<#else>
+	<@row>
+		<@columns>
+			<@empty title='#i18n{module.extend.follow.follow_info.labelNoFollower}' iconName='user-off' subtitle=' ' />
+		</@columns>
+	</@row>
 </#if>
