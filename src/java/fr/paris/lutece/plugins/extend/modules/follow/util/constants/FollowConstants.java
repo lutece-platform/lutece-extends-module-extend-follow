@@ -62,7 +62,7 @@ public final class FollowConstants
     public static final String PARAMETER_CANCEL = "cancel";
 
     // BEANS
-    public static final String BEAN_CONFIG_SERVICE = "extend-follow.followExtenderConfigService";
+    public static final String BEAN_CONFIG_SERVICE = "extendfollow.followExtenderConfigService";
 
     // MARKS
     public static final String MARK_FOLLOW = "follow";

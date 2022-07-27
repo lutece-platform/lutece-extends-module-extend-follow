@@ -17,16 +17,19 @@
 	</bean>
 	<bean id="extendfollow.followDAO" class="fr.paris.lutece.plugins.extend.modules.follow.business.FollowDAO" />
 	<bean id="extendfollow.followHistoryDAO" class="fr.paris.lutece.plugins.extend.modules.follow.business.FollowHistoryDAO" />
+	<bean id="extendfollow.followExtenderConfigDAO" class="fr.paris.lutece.plugins.extend.modules.follow.business.FollowExtenderConfigDAO" />
 
 	<!-- Services -->
 	<bean id="extendfollow.followService" class="fr.paris.lutece.plugins.extend.modules.follow.service.FollowService" />
 	<bean id="extendfollow.followHistoryService" class="fr.paris.lutece.plugins.extend.modules.follow.service.FollowHistoryService" />
-
+	<bean id="extendfollow.followExtenderConfigService" class="fr.paris.lutece.plugins.extend.service.extender.config.ResourceExtenderConfigService" 
+		p:extenderConfigDAO-ref="extendfollow.followExtenderConfigDAO" />
+		
 	<!-- Resource extender -->
 	<bean id="extendfollow.followResourceExtender" class="fr.paris.lutece.plugins.extend.modules.follow.service.extender.FollowResourceExtender"
 		p:key="follow"
 		p:i18nTitleKey="module.extend.follow.extender.label" 
-		p:configRequired="false" 
+		p:configRequired="true" 
 		p:historyEnable="true"
 		p:stateEnable="true"
 		p:resourceExtenderComponent-ref="extendfollow.followResourceExtenderComponent" />

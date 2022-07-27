@@ -42,6 +42,7 @@ import fr.paris.lutece.plugins.extend.modules.follow.service.extender.FollowReso
 import fr.paris.lutece.plugins.extend.modules.follow.service.validator.FollowValidationManagementService;
 import fr.paris.lutece.plugins.extend.modules.follow.util.constants.FollowConstants;
 import fr.paris.lutece.plugins.extend.service.ExtendPlugin;
+import fr.paris.lutece.plugins.extend.service.extender.config.IResourceExtenderConfigService;
 import fr.paris.lutece.plugins.extend.service.extender.history.IResourceExtenderHistoryService;
 import fr.paris.lutece.plugins.extend.service.extender.history.ResourceExtenderHistoryService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
@@ -100,7 +101,11 @@ public class FollowJspBean
         String strFollowValue = request.getParameter( FollowConstants.PARAMETER_FOLLOW_VALUE );
         String strFromUrl = (String) request.getSession( ).getAttribute( ExtendPlugin.PLUGIN_NAME + FollowConstants.PARAMETER_FROM_URL );
 
-        if ( StringUtils.isBlank( strIdExtendableResource ) || StringUtils.isBlank( strExtendableResourceType ) || StringUtils.isBlank( strFollowValue ) )
+        if( SecurityService.getInstance( ).getRegisteredUser( request ) == null )
+        {
+            throw new UserNotSignedException( );
+        }
+        else if ( StringUtils.isBlank( strIdExtendableResource ) || StringUtils.isBlank( strExtendableResourceType ) || StringUtils.isBlank( strFollowValue ) )
         {
             SiteMessageService.setMessage( request, FollowConstants.MESSAGE_ERROR_GENERIC_MESSAGE, SiteMessage.TYPE_STOP );
         }
@@ -130,7 +135,7 @@ public class FollowJspBean
             }
             else
             {
-                strNextUrl = AppPathService.getPortalUrl( );
+                strNextUrl = strFromUrl.replaceAll( "%", "%25" );
             }
         }
         else
@@ -202,8 +207,9 @@ public class FollowJspBean
      *             the io exception
      * @throws SiteMessageException
      *             the site message exception
+     * @throws UserNotSignedException 
      */
-    public void doCancelFollow( HttpServletRequest request, HttpServletResponse response ) throws IOException, SiteMessageException
+    public void doCancelFollow( HttpServletRequest request, HttpServletResponse response ) throws IOException, SiteMessageException, UserNotSignedException
     {
         String strIdExtendableResource = request.getParameter( FollowConstants.PARAMETER_ID_EXTENDABLE_RESOURCE );
         String strExtendableResourceType = request.getParameter( FollowConstants.PARAMETER_EXTENDABLE_RESOURCE_TYPE );
@@ -214,7 +220,12 @@ public class FollowJspBean
         {
             SiteMessageService.setMessage( request, FollowConstants.MESSAGE_ERROR_GENERIC_MESSAGE, SiteMessage.TYPE_STOP );
         }
-        if ( FollowListenerService.canFollow( strExtendableResourceType, strIdExtendableResource, user ) )
+        
+        if( SecurityService.getInstance( ).getRegisteredUser( request ) == null )
+        {
+            throw new UserNotSignedException( );
+        }
+        else if ( FollowListenerService.canFollow( strExtendableResourceType, strIdExtendableResource, user ) )
         {
             _followService.doCancelFollow( user, strIdExtendableResource, strExtendableResourceType, request );
         }
