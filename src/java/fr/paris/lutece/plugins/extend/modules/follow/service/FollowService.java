@@ -36,13 +36,14 @@ package fr.paris.lutece.plugins.extend.modules.follow.service;
 import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistory;
 import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistoryFilter;
 import fr.paris.lutece.plugins.extend.modules.follow.business.Follow;
+import fr.paris.lutece.plugins.extend.modules.follow.business.FollowExtenderConfig;
 import fr.paris.lutece.plugins.extend.modules.follow.business.FollowFilter;
 import fr.paris.lutece.plugins.extend.modules.follow.business.FollowHistory;
 import fr.paris.lutece.plugins.extend.modules.follow.business.IFollowDAO;
-import fr.paris.lutece.plugins.extend.modules.follow.service.FollowListenerService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.extender.FollowResourceExtender;
 import fr.paris.lutece.plugins.extend.service.extender.history.IResourceExtenderHistoryService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
+import fr.paris.lutece.portal.service.security.SecurityService;
 
 import org.apache.commons.collections.CollectionUtils;
 
@@ -211,5 +212,14 @@ public class FollowService implements IFollowService
     public List<Follow> findByFilter( FollowFilter filter )
     {
         return _followDAO.loadByFilter( filter, FollowPlugin.getPlugin( ) );
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isAuthorized( HttpServletRequest request, FollowExtenderConfig config )
+    {
+        return config.isAuthenticatedMode( ) || SecurityService.getInstance( ).getRegisteredUser( request ) != null;
     }
 }

@@ -34,9 +34,12 @@
 package fr.paris.lutece.plugins.extend.modules.follow.service.extender;
 
 import fr.paris.lutece.plugins.extend.business.extender.ResourceExtenderDTO;
+import fr.paris.lutece.plugins.extend.modules.follow.business.FollowExtenderConfig;
 import fr.paris.lutece.plugins.extend.modules.follow.service.FollowService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
+import fr.paris.lutece.plugins.extend.modules.follow.util.constants.FollowConstants;
 import fr.paris.lutece.plugins.extend.service.extender.AbstractResourceExtender;
+import fr.paris.lutece.plugins.extend.service.extender.config.IResourceExtenderConfigService;
 
 
 import javax.inject.Inject;
@@ -56,6 +59,9 @@ public class FollowResourceExtender extends AbstractResourceExtender
     @Inject
     @Named( FollowService.BEAN_SERVICE )
     private IFollowService _followService;
+    @Inject
+    @Named(FollowConstants.BEAN_CONFIG_SERVICE)
+    private IResourceExtenderConfigService _configService;
 
     /**
      * {@inheritDoc}
@@ -86,6 +92,10 @@ public class FollowResourceExtender extends AbstractResourceExtender
     @Override
     public void doCreateResourceAddOn( ResourceExtenderDTO extender )
     {
+        FollowExtenderConfig config = new FollowExtenderConfig( );
+
+        config.setIdExtender( extender.getIdExtender( ) );
+        _configService.create( config );
     }
 
     /**
@@ -94,5 +104,9 @@ public class FollowResourceExtender extends AbstractResourceExtender
     @Override
     public void doDeleteResourceAddOn( ResourceExtenderDTO extender )
     {
+        if( extender.getIdExtender( ) > 0 )
+        {
+            _configService.remove( extender.getIdExtender( ) );
+        }
     }
 }

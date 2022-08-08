@@ -1,0 +1,8 @@
+<@row>
+	<@columns sm=6>
+		<@formGroup rows=2 labelKey='#i18n{module.extend.follow.follow_config.labelAuthenticatedMode}' labelFor='authenticatedMode' >
+			<@radioButton labelKey='#i18n{module.extend.follow.follow_config.labelAuthenticatedMode.enable}' name="authenticatedMode" value="true" params=((config?? && config.authenticatedMode )?string('checked=true','false')!) />
+			<@radioButton labelKey='#i18n{module.extend.follow.follow_config.labelAuthenticatedMode.disable}' name="authenticatedMode"  value="false" params=((config?? && !config.authenticatedMode )?string('checked=true','false')!)/>
+		</@formGroup>
+	</@columns>
+</@row>

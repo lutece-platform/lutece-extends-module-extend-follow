@@ -38,9 +38,11 @@ import fr.paris.lutece.plugins.extend.business.extender.config.IExtenderConfig;
 import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistory;
 import fr.paris.lutece.plugins.extend.business.extender.history.ResourceExtenderHistoryFilter;
 import fr.paris.lutece.plugins.extend.modules.follow.business.Follow;
+import fr.paris.lutece.plugins.extend.modules.follow.business.FollowExtenderConfig;
 import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.extender.FollowResourceExtender;
 import fr.paris.lutece.plugins.extend.modules.follow.util.constants.FollowConstants;
+import fr.paris.lutece.plugins.extend.service.extender.config.IResourceExtenderConfigService;
 import fr.paris.lutece.plugins.extend.service.extender.history.IResourceExtenderHistoryService;
 import fr.paris.lutece.plugins.extend.util.ExtendErrorException;
 import fr.paris.lutece.plugins.extend.util.JSONUtils;
@@ -63,7 +65,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
-
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -76,10 +78,18 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
     // TEMPLATES
     private static final String TEMPLATE_FOLLOW = "skin/plugins/extend/modules/follow/follow.html";
     private static final String TEMPLATE_FOLLOW_INFO = "admin/plugins/extend/modules/follow/follow_info.html";
+    private static final String TEMPLATE_FOLLOW_EXTENDER_CONFIG = "admin/plugins/extend/modules/follow/follow_extender_config.html";
+    
+    // MARKS
+    private static final String MARK_CONFIG = "config";
+    
     @Inject
     private IFollowService _followService;
     @Inject
     private IResourceExtenderHistoryService _resourceExtenderHistoryService;
+    @Inject
+    @Named( FollowConstants.BEAN_CONFIG_SERVICE )
+    private IResourceExtenderConfigService _followExtenderConfigService;
 
     /**
      * {@inheritDoc}
@@ -107,19 +117,11 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
         model.put( FollowConstants.MARK_ID_EXTENDABLE_RESOURCE, strIdExtendableResource );
         model.put( FollowConstants.MARK_EXTENDABLE_RESOURCE_TYPE, strExtendableResourceType );
         model.put( FollowConstants.MARK_SHOW, fetchShowParameter( strParameters ) );
-
-        if ( user != null )
-        {
-            model.put( FollowConstants.MARK_CAN_FOLLOW, true );
-            model.put( FollowConstants.MARK_FOLLOW_CLOSED, false );
-            model.put( FollowConstants.MARK_CAN_DELETE_FOLLOW, isFollower( user, strIdExtendableResource, strExtendableResourceType ) );
-        }
-        else
-        {
-            model.put( FollowConstants.MARK_CAN_FOLLOW, false );
-            model.put( FollowConstants.MARK_FOLLOW_CLOSED, true );
-        }
-
+        model.put( FollowConstants.MARK_CAN_FOLLOW, true );
+        model.put( FollowConstants.MARK_CAN_DELETE_FOLLOW, isFollower( user, strIdExtendableResource, strExtendableResourceType ) );
+        model.put( FollowConstants.MARK_FOLLOW_CLOSED, !_followService.isAuthorized( request, 
+                ( FollowExtenderConfig ) _followExtenderConfigService.find( FollowConstants.MARK_FOLLOW, strIdExtendableResource, strExtendableResourceType ) ) );
+        
         model.put( FollowConstants.MARK_FOLLOW_HTML_CONTENT,
                 AppTemplateService.getTemplateFromStringFtl( strTemplateContent, request.getLocale( ), model ).getHtml( ) );
 
@@ -188,36 +190,45 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
     private boolean isFollower( LuteceUser user, String strIdExtendableResource, String strExtendableResourceType )
     {
         boolean res = false;
-        ResourceExtenderHistoryFilter filter = new ResourceExtenderHistoryFilter( );
-
-        filter.setExtenderType( FollowResourceExtender.RESOURCE_EXTENDER );
-        filter.setExtendableResourceType( strExtendableResourceType );
-        filter.setIdExtendableResource( strIdExtendableResource );
-        filter.setUserGuid( user.getName( ) );
-        filter.setAscSort( false );
-        filter.setSortedAttributeName( FollowConstants.ORDER_BY_DATE_CREATION );
-
-        List<ResourceExtenderHistory> listHistories = _resourceExtenderHistoryService.findByFilter( filter );
-
-        res = CollectionUtils.isNotEmpty( listHistories );
-
+        
+        if( user != null )
+        {
+            ResourceExtenderHistoryFilter filter = new ResourceExtenderHistoryFilter( );
+    
+            filter.setExtenderType( FollowResourceExtender.RESOURCE_EXTENDER );
+            filter.setExtendableResourceType( strExtendableResourceType );
+            filter.setIdExtendableResource( strIdExtendableResource );
+            filter.setUserGuid( user.getName( ) );
+            filter.setAscSort( false );
+            filter.setSortedAttributeName( FollowConstants.ORDER_BY_DATE_CREATION );
+    
+            List<ResourceExtenderHistory> listHistories = _resourceExtenderHistoryService.findByFilter( filter );
+    
+            res = CollectionUtils.isNotEmpty( listHistories );
+        }
         return res;
     }
 
     @Override
     public String getConfigHtml( ResourceExtenderDTO resourceExtender, Locale locale, HttpServletRequest request )
     {
-        return null;
+        Map<String, Object> model = new HashMap< >( );        
+        model.put( MARK_CONFIG, _followExtenderConfigService.find( resourceExtender.getIdExtender( ) ) );
+        
+        HtmlTemplate html = AppTemplateService.getTemplate( TEMPLATE_FOLLOW_EXTENDER_CONFIG, locale, model );      
+        
+        return html.getHtml( );
     }
 
     @Override
     public IExtenderConfig getConfig( int nIdExtender )
     {
-        return null;
+        return _followExtenderConfigService.find( nIdExtender );
     }
 
     @Override
     public void doSaveConfig( HttpServletRequest request, IExtenderConfig config ) throws ExtendErrorException
     {
+        _followExtenderConfigService.update( config );
     }
 }

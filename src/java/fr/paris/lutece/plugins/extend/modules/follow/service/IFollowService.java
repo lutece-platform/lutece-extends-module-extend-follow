@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.extend.modules.follow.service;
 
 import fr.paris.lutece.plugins.extend.modules.follow.business.Follow;
+import fr.paris.lutece.plugins.extend.modules.follow.business.FollowExtenderConfig;
 import fr.paris.lutece.plugins.extend.modules.follow.business.FollowFilter;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 
@@ -143,4 +144,12 @@ public interface IFollowService
      * @return list Follow by filter
      */
     List<Follow> findByFilter( FollowFilter filter );
+    
+    /**
+     * Returns true if user is authorized to follow
+     * @param request
+     * @param config
+     * @return
+     */
+    boolean isAuthorized( HttpServletRequest request, FollowExtenderConfig config );
 }

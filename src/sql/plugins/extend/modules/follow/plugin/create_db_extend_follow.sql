@@ -20,3 +20,13 @@ CREATE TABLE extend_follow_history (
 	follow_value INT DEFAULT 0 NOT NULL,
 	PRIMARY KEY (id_follow_history)
 );
+
+--
+-- Structure for table extend_follow_config
+--
+DROP TABLE IF EXISTS extend_follow_config;
+CREATE TABLE extend_follow_config (
+	id_extender INT DEFAULT 0 NOT NULL,
+	authenticated_mode INT DEFAULT 0 NOT NULL,
+	PRIMARY KEY (id_extender)
+);
