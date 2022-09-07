@@ -58,38 +58,38 @@ public class FollowHistoryDAO implements IFollowHistoryDAO
      */
     private int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery( );
-
         int nKey = 1;
-
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
-            nKey = daoUtil.getInt( 1 ) + 1;
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                nKey = daoUtil.getInt( 1 ) + 1;
+            }
         }
-
-        daoUtil.free( );
-
         return nKey;
     }
 
     @Override
     public void remove( int nId, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nId );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nId );
+            daoUtil.executeUpdate( );
+        }
     }
 
     @Override
     public void removeByResource( String strIdExtendableResource, String strExtendableResourceType, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_RESOURCE, plugin );
-        daoUtil.setString( 1, strIdExtendableResource );
-        daoUtil.setString( 2, strExtendableResourceType );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_RESOURCE, plugin ) )
+        {
+            daoUtil.setString( 1, strIdExtendableResource );
+            daoUtil.setString( 2, strExtendableResourceType );
+            daoUtil.executeUpdate( );
+        }
     }
 
     @Override
@@ -97,37 +97,32 @@ public class FollowHistoryDAO implements IFollowHistoryDAO
     {
         followHistory.setIdFollowHistory( newPrimaryKey( plugin ) );
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        int nIndex = 1;
-
-        daoUtil.setInt( nIndex++, followHistory.getIdFollowHistory( ) );
-        daoUtil.setLong( nIndex++, followHistory.getIdExtenderHistory( ) );
-        daoUtil.setInt( nIndex++, followHistory.getFollowValue( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
+            int nIndex = 1;
+            daoUtil.setInt( nIndex++, followHistory.getIdFollowHistory( ) );
+            daoUtil.setLong( nIndex++, followHistory.getIdExtenderHistory( ) );
+            daoUtil.setInt( nIndex++, followHistory.getFollowValue( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     @Override
     public FollowHistory findByHistoryExtenderId( long lIdHistoryExtenderId, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_EXTENDER_HISTORY_ID, plugin );
-
-        daoUtil.setLong( 1, lIdHistoryExtenderId );
-
-        daoUtil.executeQuery( );
-
         FollowHistory followHistory = null;
-
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_EXTENDER_HISTORY_ID, plugin ) )
         {
-            followHistory = new FollowHistory( );
-            followHistory.setIdFollowHistory( daoUtil.getInt( 1 ) );
-            followHistory.setIdExtenderHistory( daoUtil.getLong( 2 ) );
-            followHistory.setFollowValue( daoUtil.getInt( 3 ) );
+            daoUtil.setLong( 1, lIdHistoryExtenderId );
+            daoUtil.executeQuery( );
+            if ( daoUtil.next( ) )
+            {
+                followHistory = new FollowHistory( );
+                followHistory.setIdFollowHistory( daoUtil.getInt( 1 ) );
+                followHistory.setIdExtenderHistory( daoUtil.getLong( 2 ) );
+                followHistory.setFollowValue( daoUtil.getInt( 3 ) );
+            }
         }
-
-        daoUtil.free( );
 
         return followHistory;
     }

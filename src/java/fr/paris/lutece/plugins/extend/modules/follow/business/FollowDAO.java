@@ -64,17 +64,15 @@ public class FollowDAO implements IFollowDAO
      */
     private int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery( );
-
         int nKey = 1;
-
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
-            nKey = daoUtil.getInt( 1 ) + 1;
+            daoUtil.executeQuery( );
+            if ( daoUtil.next( ) )
+            {
+                nKey = daoUtil.getInt( 1 ) + 1;
+            }
         }
-
-        daoUtil.free( );
 
         return nKey;
     }
@@ -86,18 +84,20 @@ public class FollowDAO implements IFollowDAO
     public synchronized void insert( Follow follow, Plugin plugin )
     {
         int nNewPrimaryKey = newPrimaryKey( plugin );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        follow.setIdFollow( nNewPrimaryKey );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
 
-        int nIndex = 1;
+            follow.setIdFollow( nNewPrimaryKey );
 
-        daoUtil.setInt( nIndex++, follow.getIdFollow( ) );
-        daoUtil.setString( nIndex++, follow.getIdExtendableResource( ) );
-        daoUtil.setString( nIndex++, follow.getExtendableResourceType( ) );
-        daoUtil.setInt( nIndex, follow.getFollowCount( ) );
+            int nIndex = 1;
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            daoUtil.setInt( nIndex++, follow.getIdFollow( ) );
+            daoUtil.setString( nIndex++, follow.getIdExtendableResource( ) );
+            daoUtil.setString( nIndex++, follow.getExtendableResourceType( ) );
+            daoUtil.setInt( nIndex, follow.getFollowCount( ) );
+
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -106,23 +106,22 @@ public class FollowDAO implements IFollowDAO
     @Override
     public Follow load( int nIdfollow, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.setInt( 1, nIdfollow );
-        daoUtil.executeQuery( );
-
         Follow follow = null;
-
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
-            int nIndex = 1;
-            follow = new Follow( );
-            follow.setIdFollow( daoUtil.getInt( nIndex++ ) );
-            follow.setIdExtendableResource( daoUtil.getString( nIndex++ ) );
-            follow.setExtendableResourceType( daoUtil.getString( nIndex++ ) );
-            follow.setFollowCount( daoUtil.getInt( nIndex ) );
-        }
+            daoUtil.setInt( 1, nIdfollow );
+            daoUtil.executeQuery( );
 
-        daoUtil.free( );
+            if ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+                follow = new Follow( );
+                follow.setIdFollow( daoUtil.getInt( nIndex++ ) );
+                follow.setIdExtendableResource( daoUtil.getString( nIndex++ ) );
+                follow.setExtendableResourceType( daoUtil.getString( nIndex++ ) );
+                follow.setFollowCount( daoUtil.getInt( nIndex ) );
+            }
+        }
 
         return follow;
     }
@@ -133,11 +132,11 @@ public class FollowDAO implements IFollowDAO
     @Override
     public void delete( int nIdfollow, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdfollow );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdfollow );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -154,16 +153,16 @@ public class FollowDAO implements IFollowDAO
             sbSql.append( SQL_QUERY_FILTER_ID_RESOURCE );
         }
 
-        DAOUtil daoUtil = new DAOUtil( sbSql.toString( ), plugin );
-        daoUtil.setString( nIndex++, strExtendableResourceType );
-
-        if ( !ResourceExtenderDTOFilter.WILDCARD_ID_RESOURCE.equals( strIdExtendableResource ) )
+        try ( DAOUtil daoUtil = new DAOUtil( sbSql.toString( ), plugin ) )
         {
-            daoUtil.setString( nIndex, strIdExtendableResource );
-        }
+            daoUtil.setString( nIndex++, strExtendableResourceType );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            if ( !ResourceExtenderDTOFilter.WILDCARD_ID_RESOURCE.equals( strIdExtendableResource ) )
+            {
+                daoUtil.setString( nIndex, strIdExtendableResource );
+            }
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -173,15 +172,14 @@ public class FollowDAO implements IFollowDAO
     public void store( Follow follow, Plugin plugin )
     {
         int nIndex = 1;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        daoUtil.setString( nIndex++, follow.getIdExtendableResource( ) );
-        daoUtil.setString( nIndex++, follow.getExtendableResourceType( ) );
-        daoUtil.setInt( nIndex++, follow.getFollowCount( ) );
-
-        daoUtil.setInt( nIndex, follow.getIdFollow( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
+            daoUtil.setString( nIndex++, follow.getIdExtendableResource( ) );
+            daoUtil.setString( nIndex++, follow.getExtendableResourceType( ) );
+            daoUtil.setInt( nIndex++, follow.getFollowCount( ) );
+            daoUtil.setInt( nIndex, follow.getIdFollow( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -193,23 +191,24 @@ public class FollowDAO implements IFollowDAO
         Follow follow = null;
 
         int nIndex = 1;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_RESOURCE, plugin );
-        daoUtil.setString( nIndex++, strIdExtendableResource );
-        daoUtil.setString( nIndex, strExtendableResourceType );
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_RESOURCE, plugin ) )
         {
-            nIndex = 1;
+            daoUtil.setString( nIndex++, strIdExtendableResource );
+            daoUtil.setString( nIndex, strExtendableResourceType );
+            daoUtil.executeQuery( );
 
-            follow = new Follow( );
-            follow.setIdFollow( daoUtil.getInt( nIndex++ ) );
-            follow.setIdExtendableResource( daoUtil.getString( nIndex++ ) );
-            follow.setExtendableResourceType( daoUtil.getString( nIndex++ ) );
-            follow.setFollowCount( daoUtil.getInt( nIndex ) );
+            if ( daoUtil.next( ) )
+            {
+                nIndex = 1;
+
+                follow = new Follow( );
+                follow.setIdFollow( daoUtil.getInt( nIndex++ ) );
+                follow.setIdExtendableResource( daoUtil.getString( nIndex++ ) );
+                follow.setExtendableResourceType( daoUtil.getString( nIndex++ ) );
+                follow.setFollowCount( daoUtil.getInt( nIndex ) );
+            }
+
         }
-
-        daoUtil.free( );
 
         return follow;
     }
@@ -221,7 +220,8 @@ public class FollowDAO implements IFollowDAO
     public List<Follow> loadByFilter( FollowFilter filter, Plugin plugin )
     {
         List<Follow> listFollow = new ArrayList<Follow>( );
-        DAOUtil daoUtil = new DAOUtil( filter.buildSQLQuery( SQL_QUERY_SELECT_ALL ), plugin );
+        try ( DAOUtil daoUtil = new DAOUtil( filter.buildSQLQuery( SQL_QUERY_SELECT_ALL ), plugin ) )
+        {
         filter.setFilterValues( daoUtil );
         daoUtil.executeQuery( );
 
@@ -237,7 +237,7 @@ public class FollowDAO implements IFollowDAO
             listFollow.add( follow );
         }
 
-        daoUtil.free( );
+        }
 
         return listFollow;
     }
