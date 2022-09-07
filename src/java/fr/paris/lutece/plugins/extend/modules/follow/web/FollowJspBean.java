@@ -101,11 +101,7 @@ public class FollowJspBean
         String strFollowValue = request.getParameter( FollowConstants.PARAMETER_FOLLOW_VALUE );
         String strFromUrl = (String) request.getSession( ).getAttribute( ExtendPlugin.PLUGIN_NAME + FollowConstants.PARAMETER_FROM_URL );
 
-        if( SecurityService.getInstance( ).getRegisteredUser( request ) == null )
-        {
-            throw new UserNotSignedException( );
-        }
-        else if ( StringUtils.isBlank( strIdExtendableResource ) || StringUtils.isBlank( strExtendableResourceType ) || StringUtils.isBlank( strFollowValue ) )
+        if ( StringUtils.isBlank( strIdExtendableResource ) || StringUtils.isBlank( strExtendableResourceType ) || StringUtils.isBlank( strFollowValue ) )
         {
             SiteMessageService.setMessage( request, FollowConstants.MESSAGE_ERROR_GENERIC_MESSAGE, SiteMessage.TYPE_STOP );
         }
@@ -142,7 +138,11 @@ public class FollowJspBean
         {
             request.getSession( ).removeAttribute( strSessionKeyNextUrl );
         }
-
+        if( SecurityService.getInstance( ).getRegisteredUser( request ) == null )
+        {
+            request.getSession( ).setAttribute( strSessionKeyNextUrl, strNextUrl );
+            throw new UserNotSignedException( );
+        }
         int nFollowValue = 0;
 
         try
