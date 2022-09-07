@@ -103,6 +103,7 @@ public class FollowJspBean
 
         if( SecurityService.getInstance( ).getRegisteredUser( request ) == null )
         {
+            request.getSession( ).setAttribute( ExtendPlugin.PLUGIN_NAME + FollowConstants.PARAMETER_FROM_URL + strExtendableResourceType + strIdExtendableResource,  strFromUrl );
             throw new UserNotSignedException( );
         }
         else if ( StringUtils.isBlank( strIdExtendableResource ) || StringUtils.isBlank( strExtendableResourceType ) || StringUtils.isBlank( strFollowValue ) )
