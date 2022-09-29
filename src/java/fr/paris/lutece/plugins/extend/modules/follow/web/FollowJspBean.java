@@ -140,7 +140,7 @@ public class FollowJspBean
         }
         if( SecurityService.getInstance( ).getRegisteredUser( request ) == null )
         {
-            request.getSession( ).setAttribute( strSessionKeyNextUrl, strNextUrl );
+            request.getSession( ).setAttribute( strSessionKeyNextUrl, strFromUrl );
             throw new UserNotSignedException( );
         }
         int nFollowValue = 0;
