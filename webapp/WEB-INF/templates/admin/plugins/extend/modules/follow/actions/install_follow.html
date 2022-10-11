@@ -1,17 +1,18 @@
 <#include "../../../actions/create_extender_from_resource.html">
-<@link params='data-toggle="dropdown"' href='#'>
-	<@icon style='star' /> #i18n{module.extend.follow.extender.label}   			
-</@link>
-<@ul>
-	<@li>
-		<@div>
-			<#assign installed = false>
-			<#assign unremovable = false>
-			<#if extenderTypesInstalled.follow??>
-				<#assign installed = true>
-				<#assign unremovable = extenderTypesInstalled.follow>
-			</#if>
-			<@createExtenderFromResource extenderType="follow" installed=installed unremovable=unremovable labelAdd="#i18n{module.extend.follow.create_extender_from_resource.labelAddExtender}" labelRemove="#i18n{module.extend.follow.create_extender_from_resource.labelRemoveExtender}" />
-		</@div>
-	</@li>
-</@ul>
+<#assign installed = false>
+<#assign unremovable = false>
+<#if extenderTypesInstalled.follow??>
+	<#assign installed = true>
+	<#assign unremovable = extenderTypesInstalled.follow>
+	<@createExtenderFromResource extenderType="follow" installed=installed unremovable=unremovable labelAdd="#i18n{module.extend.follow.create_extender_from_resource.labelAddExtender}" labelRemove="#i18n{module.extend.follow.create_extender_from_resource.labelRemoveExtender}" target="preview">
+	<@span>
+		<@icon style='star' /> #i18n{module.extend.follow.extender.label}
+	</@span> 
+	</@createExtenderFromResource>
+<#else>
+<@createExtenderFromResource extenderType="follow" installed=installed unremovable=unremovable labelAdd="#i18n{module.extend.follow.create_extender_from_resource.labelAddExtender}" labelRemove="#i18n{module.extend.follow.create_extender_from_resource.labelRemoveExtender}" target="preview">
+		<@span>
+			<@icon style='star' /> #i18n{module.extend.follow.extender.label}
+		</@span> 
+	</@createExtenderFromResource>
+</#if>
