@@ -49,6 +49,7 @@ public final class FollowConstants
     // MESSAGES
     public static final String MESSAGE_NOTIFY_SUBJECT = "module.extend.follow.message.notify.subject";
     public static final String MESSAGE_ERROR_GENERIC_MESSAGE = "module.extend.follow.message.error.genericMessage";
+    public static final String MESSAGE_ERROR_INVALID_TOKEN = "module.extend.follow.message.error.invalidToken";
     public static final String MESSAGE_STOP_GENERIC_MESSAGE = "module.extend.follow.message.stop.genericMessage";
     public static final String MESSAGE_CANNOT_VOTE = "module.extend.follow.message.cannotVote";
     public static final String MESSAGE_PHASE_IS_CLOSE = "module.extend.follow.message.phaseIsClose";
@@ -60,6 +61,10 @@ public final class FollowConstants
     public static final String PARAMETER_HTTP_REFERER = "referer";
     public static final String PARAMETER_ID_VOTE_TYPE = "idVoteType";
     public static final String PARAMETER_CANCEL = "cancel";
+
+    // ACTIONS
+    public static final String ACTION_DO_FOLLOW = "doFollow";
+    public static final String ACTION_CANCEL_FOLLOW = "doCancelFollow";
 
     // BEANS
     public static final String BEAN_CONFIG_SERVICE = "extendfollow.followExtenderConfigService";
@@ -82,6 +87,8 @@ public final class FollowConstants
     public static final String MARK_CAN_FOLLOW = "canFollow";
     public static final String MARK_CAN_DELETE_FOLLOW = "canDeleteFollow";
     public static final String MARK_FOLLOW_CLOSED = "followClosed";
+    public static final String MARK_FOLLOW_TOKEN = "followToken";
+    public static final String MARK_CANCEL_FOLLOW_TOKEN = "cancelFollowToken";
     public static final String MARK_EXTEND_FOLLOW = "extend_follow";
 
     // CONSTANTS

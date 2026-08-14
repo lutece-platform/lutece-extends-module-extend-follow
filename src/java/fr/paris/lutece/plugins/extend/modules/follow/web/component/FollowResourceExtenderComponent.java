@@ -49,6 +49,7 @@ import fr.paris.lutece.plugins.extend.util.JSONUtils;
 import fr.paris.lutece.plugins.extend.web.component.AbstractResourceExtenderComponent;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
+import fr.paris.lutece.portal.service.security.SecurityTokenService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.template.DatabaseTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -121,6 +122,10 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
         model.put( FollowConstants.MARK_CAN_DELETE_FOLLOW, isFollower( user, strIdExtendableResource, strExtendableResourceType ) );
         model.put( FollowConstants.MARK_FOLLOW_CLOSED, !_followService.isAuthorized( request, 
                 ( FollowExtenderConfig ) _followExtenderConfigService.find( FollowConstants.MARK_FOLLOW, strIdExtendableResource, strExtendableResourceType ) ) );
+        model.put( FollowConstants.MARK_FOLLOW_TOKEN,
+                SecurityTokenService.getInstance( ).getToken( request, FollowConstants.ACTION_DO_FOLLOW ) );
+        model.put( FollowConstants.MARK_CANCEL_FOLLOW_TOKEN,
+                SecurityTokenService.getInstance( ).getToken( request, FollowConstants.ACTION_CANCEL_FOLLOW ) );
         
         model.put( FollowConstants.MARK_FOLLOW_HTML_CONTENT,
                 AppTemplateService.getTemplateFromStringFtl( strTemplateContent, request.getLocale( ), model ).getHtml( ) );
