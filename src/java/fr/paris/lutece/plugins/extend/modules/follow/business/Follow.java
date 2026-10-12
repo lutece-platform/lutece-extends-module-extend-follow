@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.extend.modules.follow.business;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  *

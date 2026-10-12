@@ -34,10 +34,10 @@
 package fr.paris.lutece.plugins.extend.modules.follow.service.validator;
 
 import fr.paris.lutece.portal.service.security.LuteceUser;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -63,7 +63,7 @@ public final class FollowValidationManagementService
      */
     public static String validateFollow( HttpServletRequest request, LuteceUser user, String strIdResource, String strResourceTypeKey, int nVoteValue )
     {
-        for ( IFollowValidationService validationService : SpringContextService.getBeansOfType( IFollowValidationService.class ) )
+        for ( IFollowValidationService validationService : CDI.current( ).select( IFollowValidationService.class ) )
         {
             String strUrlError = validationService.validateFollow( request, user, strIdResource, strResourceTypeKey, nVoteValue );
 

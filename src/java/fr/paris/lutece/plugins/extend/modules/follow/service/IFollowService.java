@@ -38,11 +38,10 @@ import fr.paris.lutece.plugins.extend.modules.follow.business.FollowExtenderConf
 import fr.paris.lutece.plugins.extend.modules.follow.business.FollowFilter;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * IFollowService.
@@ -55,7 +54,6 @@ public interface IFollowService
      * @param nIdFollow
      *            the nId follow
      */
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void remove( int nIdFollow );
 
     /**
@@ -66,7 +64,6 @@ public interface IFollowService
      * @param strExtendableResourceType
      *            the str extendable resource type
      */
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void removeByResource( String strIdExtendableResource, String strExtendableResourceType );
 
     /**
@@ -75,7 +72,6 @@ public interface IFollowService
      * @param follow
      *            the follow
      */
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void create( Follow follow );
 
     /**
@@ -84,7 +80,6 @@ public interface IFollowService
      * @param follow
      *            the follow
      */
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void update( Follow follow );
 
     /**
@@ -99,7 +94,6 @@ public interface IFollowService
      * @param request
      *            the request
      */
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void doFollow( String strIdExtendableResource, String strExtendableResourceType, int nVoteValue, HttpServletRequest request );
 
     /**

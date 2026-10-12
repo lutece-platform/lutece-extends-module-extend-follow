@@ -1,3 +1,6 @@
+-- liquibase formatted sql
+-- changeset extendfollow:update_db_extend_follow-1.0.3-2.0.0.sql
+-- preconditions onFail:MARK_RAN onError:WARN
 --
 -- Structure for table extend_follow_config
 --

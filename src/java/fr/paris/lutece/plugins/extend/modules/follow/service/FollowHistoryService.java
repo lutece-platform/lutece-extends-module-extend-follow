@@ -36,13 +36,18 @@ package fr.paris.lutece.plugins.extend.modules.follow.service;
 import fr.paris.lutece.plugins.extend.modules.follow.business.FollowHistory;
 import fr.paris.lutece.plugins.extend.modules.follow.business.IFollowHistoryDAO;
 
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.transaction.Transactional;
 
 /**
  *
  * followService
  *
  */
+@ApplicationScoped
+@Named( FollowHistoryService.BEAN_SERVICE )
 public class FollowHistoryService implements IFollowHistoryService
 {
     /** The Constant BEAN_SERVICE. */
@@ -50,24 +55,39 @@ public class FollowHistoryService implements IFollowHistoryService
     @Inject
     private IFollowHistoryDAO _followHistoryDAO;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @Transactional
     public void remove( int nId )
     {
         _followHistoryDAO.remove( nId, FollowPlugin.getPlugin( ) );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @Transactional
     public void removeByResource( String strIdExtendableResource, String strExtendableResourceType )
     {
         _followHistoryDAO.removeByResource( strIdExtendableResource, strExtendableResourceType, FollowPlugin.getPlugin( ) );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @Transactional
     public void create( FollowHistory followHistory )
     {
         _followHistoryDAO.create( followHistory, FollowPlugin.getPlugin( ) );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public FollowHistory findByHistoryExtenderId( long lIdHistoryExtenderId )
     {

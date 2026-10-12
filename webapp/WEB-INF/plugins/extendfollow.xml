@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?><plug-in>
     <name>extendfollow</name>
     <class>fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation</class>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <documentation/>
     <installation/>
     <changes/>
     <user-guide/>
-    <description>extendfollow.plugin.description</description>
-    <provider>extendfollow.plugin.provider</provider>
-    <provider-url>http://your.web.site.com</provider-url>
-    <icon-url>images/admin/skin/feature_default_icon.png</icon-url>
+    <description>module.extend.follow.plugin.description</description>
+    <provider>module.extend.follow.plugin.provider</provider>
+    <provider-url>http://lutece.paris.fr</provider-url>
+    <icon-url>themes/admin/shared/images/apps.svg</icon-url>
     <copyright>Copyright (c) 2013 Your Company</copyright>
-    <db-pool-required>0</db-pool-required>
     
     <core-version-dependency>
-        <min-core-version>4.1.0</min-core-version>
+        <min-core-version>8.0.0</min-core-version>
         <max-core-version/>	
     </core-version-dependency>
 
@@ -28,6 +27,9 @@
 
     <!-- XPages parameters -->
     <applications>
+        <application>
+            <application-id>extendfollow</application-id>
+        </application>
     </applications>
 
     <!-- Portlet parameters -->
