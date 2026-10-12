@@ -33,45 +33,42 @@
  */
 package fr.paris.lutece.plugins.extend.modules.follow.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Stream;
+
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.portal.service.security.LuteceUser;
 
-public class FollowListenerService
+/**
+ * Notifies the follow listeners: the ones registered for a resource type, and every {@link IFollowListener} CDI bean.
+ */
+public final class FollowListenerService
 {
-
-    private static Map<String, List<IFollowListener>> _mapListeners = new HashMap< >( );
-    private static boolean _bHasListeners;
+    private static final Map<String, List<IFollowListener>> _mapListeners = new ConcurrentHashMap<>( );
 
     /**
      * Private constructor
      */
-    private FollowListenerService() {
-    	
+    private FollowListenerService( )
+    {
     }
+
     /**
-     * Register a comment listener.
+     * Register a follow listener.
      * 
      * @param strExtendableResourceType
-     *            The extendable resource type associated with the listener. Use {@link #CONSTANT_EVERY_EXTENDABLE_RESOURCE_TYPE} to associated the listener
-     *            with every resource type.
+     *            The extendable resource type associated with the listener
      * @param listener
      *            The listener to register
      */
-    public static synchronized void registerListener( String strExtendableResourceType, IFollowListener listener )
+    public static void registerListener( String strExtendableResourceType, IFollowListener listener )
     {
-        List<IFollowListener> listListeners = _mapListeners.get( strExtendableResourceType );
-        if ( listListeners == null )
-        {
-            listListeners = new ArrayList< >( );
-            _mapListeners.put( strExtendableResourceType, listListeners );
-        }
-        listListeners.add( listener );
-        _bHasListeners = true;
+        _mapListeners.computeIfAbsent( strExtendableResourceType, strType -> new CopyOnWriteArrayList<>( ) ).add( listener );
     }
 
     /**
@@ -81,68 +78,69 @@ public class FollowListenerService
      */
     public static boolean hasListener( )
     {
-        return _bHasListeners;
+        return !_mapListeners.isEmpty( ) || !CDI.current( ).select( IFollowListener.class ).isUnsatisfied( );
     }
 
     /**
-     * Notify to listeners new follow. Only listeners associated with the extendable resource type of the comment are notified.
+     * Notify to listeners new follow. Only listeners associated with the extendable resource type are notified, with
+     * every listener bean.
      * 
      * @param strExtendableResourceType
      *            The extendable resource type
      * @param strIdExtendableResource
-     *            The extendable resource id of the comment
+     *            The extendable resource id
      * @param request
      *            the HTTP request
      */
     public static void follow( String strExtendableResourceType, String strIdExtendableResource, HttpServletRequest request )
     {
-        List<IFollowListener> listListeners = _mapListeners.get( strExtendableResourceType );
-        if ( listListeners != null )
-        {
-            for ( IFollowListener listener : listListeners )
-            {
-                listener.follow( strExtendableResourceType, strIdExtendableResource, request );
-            }
-        }
-
+        getListeners( strExtendableResourceType ).forEach( listener -> listener.follow( strExtendableResourceType, strIdExtendableResource, request ) );
     }
 
     /**
-     * Notify to listeners canceled follow. Only listeners associated with the extendable resource type of the comment are notified.
+     * Notify to listeners canceled follow. Only listeners associated with the extendable resource type are notified,
+     * with every listener bean.
      * 
      * @param strExtendableResourceType
      *            The extendable resource type
      * @param strIdExtendableResource
-     *            The extendable resource id of the comment
+     *            The extendable resource id
      * @param request
      *            the HTTP request
      */
     public static void cancelFollow( String strExtendableResourceType, String strIdExtendableResource, HttpServletRequest request )
     {
-        List<IFollowListener> listListeners = _mapListeners.get( strExtendableResourceType );
-        if ( listListeners != null )
-        {
-            for ( IFollowListener listener : listListeners )
-            {
-                listener.cancelFollow( strExtendableResourceType, strIdExtendableResource, request );
-            }
-        }
-
+        getListeners( strExtendableResourceType ).forEach( listener -> listener.cancelFollow( strExtendableResourceType, strIdExtendableResource, request ) );
     }
 
+    /**
+     * Asks the listeners whether a user may follow a resource.
+     *
+     * @param strExtendableResourceType
+     *            The extendable resource type
+     * @param strIdExtendableResource
+     *            The extendable resource id
+     * @param user
+     *            the user
+     * @return true when no listener refuses
+     */
     public static boolean canFollow( String strExtendableResourceType, String strIdExtendableResource, LuteceUser user )
     {
-        List<IFollowListener> listListeners = _mapListeners.get( strExtendableResourceType );
-        if ( listListeners != null )
-        {
-            for ( IFollowListener listener : listListeners )
-            {
-            	if( !listener.canFollow( strExtendableResourceType, strIdExtendableResource, user )) {
-            		return false;
-            	}
-            }
-        }
-        return true;
+        return getListeners( strExtendableResourceType ).allMatch( listener -> listener.canFollow( strExtendableResourceType, strIdExtendableResource, user ) );
     }
 
+    /**
+     * Gives the listeners registered for a resource type, then the listener beans.
+     *
+     * @param strExtendableResourceType
+     *            The extendable resource type
+     * @return the listeners
+     */
+    private static Stream<IFollowListener> getListeners( String strExtendableResourceType )
+    {
+        List<IFollowListener> listRegistered = ( strExtendableResourceType != null ) ? _mapListeners.get( strExtendableResourceType ) : null;
+        Stream<IFollowListener> registered = ( listRegistered != null ) ? listRegistered.stream( ) : Stream.empty( );
+
+        return Stream.concat( registered, CDI.current( ).select( IFollowListener.class ).stream( ) );
+    }
 }

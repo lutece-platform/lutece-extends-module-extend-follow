@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.extend.modules.follow.service;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 
 /**
@@ -42,13 +41,10 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
  * FollowPlugin
  *
  */
-public class FollowPlugin extends PluginDefaultImplementation
+public final class FollowPlugin
 {
     /** The Constant PLUGIN_NAME. */
     public static final String PLUGIN_NAME = "extendfollow";
-
-    /** The Constant TRANSACTION_MANAGER. */
-    public static final String TRANSACTION_MANAGER = PLUGIN_NAME + ".transactionManager";
 
     /**
      * Gets the plugin.
@@ -58,5 +54,12 @@ public class FollowPlugin extends PluginDefaultImplementation
     public static Plugin getPlugin( )
     {
         return PluginService.getPlugin( PLUGIN_NAME );
+    }
+
+    /**
+     * Private constructor: constants and static accessor only.
+     */
+    private FollowPlugin( )
+    {
     }
 }

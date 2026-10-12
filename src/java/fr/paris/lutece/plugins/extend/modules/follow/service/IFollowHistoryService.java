@@ -35,8 +35,6 @@ package fr.paris.lutece.plugins.extend.modules.follow.service;
 
 import fr.paris.lutece.plugins.extend.modules.follow.business.FollowHistory;
 
-import org.springframework.transaction.annotation.Transactional;
-
 /**
  * IFollowService.
  */
@@ -48,7 +46,6 @@ public interface IFollowHistoryService
      * @param nId
      *            the n id Follow
      */
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void remove( int nId );
 
     /**
@@ -59,7 +56,6 @@ public interface IFollowHistoryService
      * @param strExtendableResourceType
      *            the str extendable resource type
      */
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void removeByResource( String strIdExtendableResource, String strExtendableResourceType );
 
     /**
@@ -68,7 +64,6 @@ public interface IFollowHistoryService
      * @param followHistory
      *            the FollowHistory
      */
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     void create( FollowHistory followHistory );
 
     /**
@@ -78,6 +73,5 @@ public interface IFollowHistoryService
      *            the extender id
      * @return the corresponding {@link FollowHistory}
      */
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
     FollowHistory findByHistoryExtenderId( long lIdHistoryExtenderId );
 }

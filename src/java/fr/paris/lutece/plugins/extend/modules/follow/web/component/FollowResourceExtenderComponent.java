@@ -42,6 +42,7 @@ import fr.paris.lutece.plugins.extend.modules.follow.business.FollowExtenderConf
 import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
 import fr.paris.lutece.plugins.extend.modules.follow.service.extender.FollowResourceExtender;
 import fr.paris.lutece.plugins.extend.modules.follow.util.constants.FollowConstants;
+import fr.paris.lutece.plugins.extend.service.extender.IResourceExtender;
 import fr.paris.lutece.plugins.extend.service.extender.config.IResourceExtenderConfigService;
 import fr.paris.lutece.plugins.extend.service.extender.history.IResourceExtenderHistoryService;
 import fr.paris.lutece.plugins.extend.util.ExtendErrorException;
@@ -49,7 +50,7 @@ import fr.paris.lutece.plugins.extend.util.JSONUtils;
 import fr.paris.lutece.plugins.extend.web.component.AbstractResourceExtenderComponent;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
-import fr.paris.lutece.portal.service.security.SecurityTokenService;
+import fr.paris.lutece.portal.service.security.ISecurityTokenService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.template.DatabaseTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -65,15 +66,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
  * FollowResourceExtenderComponent
  *
  */
+@ApplicationScoped
+@Named( "extendfollow.followResourceExtenderComponent" )
 public class FollowResourceExtenderComponent extends AbstractResourceExtenderComponent
 {
     // TEMPLATES
@@ -91,6 +95,20 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
     @Inject
     @Named( FollowConstants.BEAN_CONFIG_SERVICE )
     private IResourceExtenderConfigService _followExtenderConfigService;
+    @Inject
+    @Named( FollowResourceExtender.BEAN_NAME )
+    private IResourceExtender _resourceExtender;
+    @Inject
+    private ISecurityTokenService _securityTokenService;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IResourceExtender getResourceExtender( )
+    {
+        return _resourceExtender;
+    }
 
     /**
      * {@inheritDoc}
@@ -104,7 +122,6 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings( "deprecation" )
     @Override
     public String getPageAddOn( String strIdExtendableResource, String strExtendableResourceType, String strParameters, HttpServletRequest request )
     {
@@ -123,9 +140,9 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
         model.put( FollowConstants.MARK_FOLLOW_CLOSED, !_followService.isAuthorized( request, 
                 ( FollowExtenderConfig ) _followExtenderConfigService.find( FollowConstants.MARK_FOLLOW, strIdExtendableResource, strExtendableResourceType ) ) );
         model.put( FollowConstants.MARK_FOLLOW_TOKEN,
-                SecurityTokenService.getInstance( ).getToken( request, FollowConstants.ACTION_DO_FOLLOW ) );
+                _securityTokenService.getToken( request, FollowConstants.ACTION_DO_FOLLOW ) );
         model.put( FollowConstants.MARK_CANCEL_FOLLOW_TOKEN,
-                SecurityTokenService.getInstance( ).getToken( request, FollowConstants.ACTION_CANCEL_FOLLOW ) );
+                _securityTokenService.getToken( request, FollowConstants.ACTION_CANCEL_FOLLOW ) );
         
         model.put( FollowConstants.MARK_FOLLOW_HTML_CONTENT,
                 AppTemplateService.getTemplateFromStringFtl( strTemplateContent, request.getLocale( ), model ).getHtml( ) );
@@ -175,7 +192,7 @@ public class FollowResourceExtenderComponent extends AbstractResourceExtenderCom
             }
             else
             {
-                AppLogService.debug( "No " + FollowConstants.JSON_KEY_SHOW + " found in " + jsonParameters );
+                AppLogService.debug( "No {} found in {}", FollowConstants.JSON_KEY_SHOW, jsonParameters );
             }
         }
 

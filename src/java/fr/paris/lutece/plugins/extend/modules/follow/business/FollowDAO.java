@@ -37,16 +37,19 @@ import fr.paris.lutece.plugins.extend.business.extender.ResourceExtenderDTOFilte
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This class provides Data Access methods for follow objects.
  */
+@ApplicationScoped
 public class FollowDAO implements IFollowDAO
 {
-    private static final String SQL_QUERY_NEW_PK = " SELECT max( id_follow ) FROM extend_follow ";
-    private static final String SQL_QUERY_INSERT = " INSERT INTO extend_follow ( id_follow, id_resource, resource_type, follow_count ) VALUES ( ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_INSERT = " INSERT INTO extend_follow ( id_resource, resource_type, follow_count ) VALUES ( ?, ?, ? ) ";
     private static final String SQL_QUERY_SELECT_ALL = " SELECT id_follow, id_resource, resource_type, follow_count FROM extend_follow ";
     private static final String SQL_QUERY_SELECT = SQL_QUERY_SELECT_ALL + " WHERE id_follow = ? ";
     private static final String SQL_QUERY_SELECT_BY_RESOURCE = SQL_QUERY_SELECT_ALL + " WHERE id_resource = ? AND resource_type = ? ";
@@ -56,48 +59,25 @@ public class FollowDAO implements IFollowDAO
     private static final String SQL_QUERY_UPDATE = " UPDATE extend_follow SET id_resource = ?, resource_type = ?, follow_count = ? WHERE id_follow = ?  ";
 
     /**
-     * Generates a new primary key.
-     *
-     * @param plugin
-     *            the plugin
-     * @return The new primary key
-     */
-    private int newPrimaryKey( Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery( );
-
-        int nKey = 1;
-
-        if ( daoUtil.next( ) )
-        {
-            nKey = daoUtil.getInt( 1 ) + 1;
-        }
-
-        daoUtil.free( );
-
-        return nKey;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
-    public synchronized void insert( Follow follow, Plugin plugin )
+    public void insert( Follow follow, Plugin plugin )
     {
-        int nNewPrimaryKey = newPrimaryKey( plugin );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        follow.setIdFollow( nNewPrimaryKey );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
+        {
+            int nIndex = 1;
+            daoUtil.setString( nIndex++, follow.getIdExtendableResource( ) );
+            daoUtil.setString( nIndex++, follow.getExtendableResourceType( ) );
+            daoUtil.setInt( nIndex, follow.getFollowCount( ) );
 
-        int nIndex = 1;
+            daoUtil.executeUpdate( );
 
-        daoUtil.setInt( nIndex++, follow.getIdFollow( ) );
-        daoUtil.setString( nIndex++, follow.getIdExtendableResource( ) );
-        daoUtil.setString( nIndex++, follow.getExtendableResourceType( ) );
-        daoUtil.setInt( nIndex, follow.getFollowCount( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            if ( daoUtil.nextGeneratedKey( ) )
+            {
+                follow.setIdFollow( daoUtil.getGeneratedKeyInt( 1 ) );
+            }
+        }
     }
 
     /**
@@ -106,25 +86,20 @@ public class FollowDAO implements IFollowDAO
     @Override
     public Follow load( int nIdfollow, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.setInt( 1, nIdfollow );
-        daoUtil.executeQuery( );
-
-        Follow follow = null;
-
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
-            int nIndex = 1;
-            follow = new Follow( );
-            follow.setIdFollow( daoUtil.getInt( nIndex++ ) );
-            follow.setIdExtendableResource( daoUtil.getString( nIndex++ ) );
-            follow.setExtendableResourceType( daoUtil.getString( nIndex++ ) );
-            follow.setFollowCount( daoUtil.getInt( nIndex ) );
+            daoUtil.setInt( 1, nIdfollow );
+            daoUtil.executeQuery( );
+
+            Follow follow = null;
+
+            if ( daoUtil.next( ) )
+            {
+                follow = dataToObject( daoUtil );
+            }
+
+            return follow;
         }
-
-        daoUtil.free( );
-
-        return follow;
     }
 
     /**
@@ -133,11 +108,11 @@ public class FollowDAO implements IFollowDAO
     @Override
     public void delete( int nIdfollow, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdfollow );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdfollow );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -154,16 +129,17 @@ public class FollowDAO implements IFollowDAO
             sbSql.append( SQL_QUERY_FILTER_ID_RESOURCE );
         }
 
-        DAOUtil daoUtil = new DAOUtil( sbSql.toString( ), plugin );
-        daoUtil.setString( nIndex++, strExtendableResourceType );
-
-        if ( !ResourceExtenderDTOFilter.WILDCARD_ID_RESOURCE.equals( strIdExtendableResource ) )
+        try ( DAOUtil daoUtil = new DAOUtil( sbSql.toString( ), plugin ) )
         {
-            daoUtil.setString( nIndex, strIdExtendableResource );
-        }
+            daoUtil.setString( nIndex++, strExtendableResourceType );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            if ( !ResourceExtenderDTOFilter.WILDCARD_ID_RESOURCE.equals( strIdExtendableResource ) )
+            {
+                daoUtil.setString( nIndex, strIdExtendableResource );
+            }
+
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -172,16 +148,16 @@ public class FollowDAO implements IFollowDAO
     @Override
     public void store( Follow follow, Plugin plugin )
     {
-        int nIndex = 1;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        daoUtil.setString( nIndex++, follow.getIdExtendableResource( ) );
-        daoUtil.setString( nIndex++, follow.getExtendableResourceType( ) );
-        daoUtil.setInt( nIndex++, follow.getFollowCount( ) );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
+            int nIndex = 1;
+            daoUtil.setString( nIndex++, follow.getIdExtendableResource( ) );
+            daoUtil.setString( nIndex++, follow.getExtendableResourceType( ) );
+            daoUtil.setInt( nIndex++, follow.getFollowCount( ) );
+            daoUtil.setInt( nIndex, follow.getIdFollow( ) );
 
-        daoUtil.setInt( nIndex, follow.getIdFollow( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -190,28 +166,22 @@ public class FollowDAO implements IFollowDAO
     @Override
     public Follow loadByResource( String strIdExtendableResource, String strExtendableResourceType, Plugin plugin )
     {
-        Follow follow = null;
-
-        int nIndex = 1;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_RESOURCE, plugin );
-        daoUtil.setString( nIndex++, strIdExtendableResource );
-        daoUtil.setString( nIndex, strExtendableResourceType );
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_RESOURCE, plugin ) )
         {
-            nIndex = 1;
+            int nIndex = 1;
+            daoUtil.setString( nIndex++, strIdExtendableResource );
+            daoUtil.setString( nIndex, strExtendableResourceType );
+            daoUtil.executeQuery( );
 
-            follow = new Follow( );
-            follow.setIdFollow( daoUtil.getInt( nIndex++ ) );
-            follow.setIdExtendableResource( daoUtil.getString( nIndex++ ) );
-            follow.setExtendableResourceType( daoUtil.getString( nIndex++ ) );
-            follow.setFollowCount( daoUtil.getInt( nIndex ) );
+            Follow follow = null;
+
+            if ( daoUtil.next( ) )
+            {
+                follow = dataToObject( daoUtil );
+            }
+
+            return follow;
         }
-
-        daoUtil.free( );
-
-        return follow;
     }
 
     /**
@@ -220,25 +190,38 @@ public class FollowDAO implements IFollowDAO
     @Override
     public List<Follow> loadByFilter( FollowFilter filter, Plugin plugin )
     {
-        List<Follow> listFollow = new ArrayList<Follow>( );
-        DAOUtil daoUtil = new DAOUtil( filter.buildSQLQuery( SQL_QUERY_SELECT_ALL ), plugin );
-        filter.setFilterValues( daoUtil );
-        daoUtil.executeQuery( );
+        List<Follow> listFollow = new ArrayList<>( );
 
-        while ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( filter.buildSQLQuery( SQL_QUERY_SELECT_ALL ), plugin ) )
         {
-            int nIndex = 1;
-            Follow follow = new Follow( );
-            follow.setIdFollow( daoUtil.getInt( nIndex++ ) );
-            follow.setIdExtendableResource( daoUtil.getString( nIndex++ ) );
-            follow.setExtendableResourceType( daoUtil.getString( nIndex++ ) );
-            follow.setFollowCount( daoUtil.getInt( nIndex ) );
+            filter.setFilterValues( daoUtil );
+            daoUtil.executeQuery( );
 
-            listFollow.add( follow );
+            while ( daoUtil.next( ) )
+            {
+                listFollow.add( dataToObject( daoUtil ) );
+            }
         }
 
-        daoUtil.free( );
-
         return listFollow;
+    }
+
+    /**
+     * Builds a follow from the current row.
+     *
+     * @param daoUtil
+     *            the DAOUtil positioned on a row
+     * @return the follow
+     */
+    private Follow dataToObject( DAOUtil daoUtil )
+    {
+        int nIndex = 1;
+        Follow follow = new Follow( );
+        follow.setIdFollow( daoUtil.getInt( nIndex++ ) );
+        follow.setIdExtendableResource( daoUtil.getString( nIndex++ ) );
+        follow.setExtendableResourceType( daoUtil.getString( nIndex++ ) );
+        follow.setFollowCount( daoUtil.getInt( nIndex ) );
+
+        return follow;
     }
 }

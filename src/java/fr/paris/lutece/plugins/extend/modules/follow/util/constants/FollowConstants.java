@@ -41,17 +41,11 @@ package fr.paris.lutece.plugins.extend.modules.follow.util.constants;
 public final class FollowConstants
 {
     // PROPERTIES
-    public static final String PROPERTY_FOLLOW_CONFIG_LABEL_NO_MAILING_LIST = "module.extend.follow.follow_config.labelNoMailingList";
     public static final String PROPERTY_WEBMASTER_EMAIL = "email.webmaster";
     public static final String PROPERTY_LUTECE_NAME = "lutece.name";
-    public static final String PROPERTY_MANAGE_VOTE_TYPES_PAGE_TITLE = "module.extend.follow.manage_vote_types.pageTitle";
 
     // MESSAGES
-    public static final String MESSAGE_NOTIFY_SUBJECT = "module.extend.follow.message.notify.subject";
     public static final String MESSAGE_ERROR_GENERIC_MESSAGE = "module.extend.follow.message.error.genericMessage";
-    public static final String MESSAGE_ERROR_INVALID_TOKEN = "module.extend.follow.message.error.invalidToken";
-    public static final String MESSAGE_STOP_GENERIC_MESSAGE = "module.extend.follow.message.stop.genericMessage";
-    public static final String MESSAGE_CANNOT_VOTE = "module.extend.follow.message.cannotVote";
     public static final String MESSAGE_PHASE_IS_CLOSE = "module.extend.follow.message.phaseIsClose";
 
     // PARAMETERS

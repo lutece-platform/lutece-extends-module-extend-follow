@@ -47,19 +47,23 @@ import fr.paris.lutece.portal.service.security.SecurityService;
 
 import org.apache.commons.collections.CollectionUtils;
 
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
  * followService
  *
  */
+@ApplicationScoped
+@Named( FollowService.BEAN_SERVICE )
 public class FollowService implements IFollowService
 {
     /** The Constant BEAN_SERVICE. */
@@ -75,7 +79,7 @@ public class FollowService implements IFollowService
      * {@inheritDoc}
      */
     @Override
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
+    @Transactional
     public void create( Follow follow )
     {
         _followDAO.insert( follow, FollowPlugin.getPlugin( ) );
@@ -85,7 +89,7 @@ public class FollowService implements IFollowService
      * {@inheritDoc}
      */
     @Override
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
+    @Transactional
     public void update( Follow follow )
     {
         _followDAO.store( follow, FollowPlugin.getPlugin( ) );
@@ -95,7 +99,7 @@ public class FollowService implements IFollowService
      * {@inheritDoc}
      */
     @Override
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
+    @Transactional
     public synchronized void doFollow( String strIdExtendableResource, String strExtendableResourceType, int nVoteValue, HttpServletRequest request )
     {
         Follow follow = findByResource( strIdExtendableResource, strExtendableResourceType );
@@ -115,8 +119,9 @@ public class FollowService implements IFollowService
             update( follow );
         }
 
+        LuteceUser user = SecurityService.isAuthenticationEnable( ) ? SecurityService.getInstance( ).getRegisteredUser( request ) : null;
         ResourceExtenderHistory history = _resourceExtenderHistoryService.create( FollowResourceExtender.RESOURCE_EXTENDER, strIdExtendableResource,
-                strExtendableResourceType, request );
+                strExtendableResourceType, ( user != null ) ? user.getName( ) : null, request.getRemoteAddr( ) );
 
         FollowHistory followHistory = new FollowHistory( );
         followHistory.setIdExtenderHistory( history.getIdHistory( ) );
@@ -131,7 +136,7 @@ public class FollowService implements IFollowService
      * {@inheritDoc}
      */
     @Override
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
+    @Transactional
     public synchronized void doCancelFollow( LuteceUser user, String strIdExtendableResource, String strExtendableResourceType, HttpServletRequest request )
     {
         ResourceExtenderHistoryFilter resourceExtenderHistoryFilter = new ResourceExtenderHistoryFilter( );
@@ -169,7 +174,7 @@ public class FollowService implements IFollowService
      * {@inheritDoc}
      */
     @Override
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
+    @Transactional
     public void remove( int nIdFollow )
     {
         _followDAO.delete( nIdFollow, FollowPlugin.getPlugin( ) );
@@ -179,7 +184,7 @@ public class FollowService implements IFollowService
      * {@inheritDoc}
      */
     @Override
-    @Transactional( FollowPlugin.TRANSACTION_MANAGER )
+    @Transactional
     public void removeByResource( String strIdExtendableResource, String strExtendableResourceType )
     {
         _followDAO.deleteByResource( strIdExtendableResource, strExtendableResourceType, FollowPlugin.getPlugin( ) );

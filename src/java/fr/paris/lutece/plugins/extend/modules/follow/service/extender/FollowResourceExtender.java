@@ -35,33 +35,56 @@ package fr.paris.lutece.plugins.extend.modules.follow.service.extender;
 
 import fr.paris.lutece.plugins.extend.business.extender.ResourceExtenderDTO;
 import fr.paris.lutece.plugins.extend.modules.follow.business.FollowExtenderConfig;
-import fr.paris.lutece.plugins.extend.modules.follow.service.FollowService;
-import fr.paris.lutece.plugins.extend.modules.follow.service.IFollowService;
 import fr.paris.lutece.plugins.extend.modules.follow.util.constants.FollowConstants;
 import fr.paris.lutece.plugins.extend.service.extender.AbstractResourceExtender;
 import fr.paris.lutece.plugins.extend.service.extender.config.IResourceExtenderConfigService;
+import fr.paris.lutece.plugins.extend.modules.follow.web.component.FollowResourceExtenderComponent;
 
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * FollowResourceExtender
  */
+@ApplicationScoped
+@Named( FollowResourceExtender.BEAN_NAME )
 public class FollowResourceExtender extends AbstractResourceExtender
 {
     /** The Constant RESOURCE_EXTENDER. */
     public static final String RESOURCE_EXTENDER = "follow";
+
+    /** The bean name. */
+    public static final String BEAN_NAME = "extendfollow.followResourceExtender";
+
+    private static final String I18N_TITLE_KEY = "module.extend.follow.extender.label";
+
     @Inject
-    @Named( FollowService.BEAN_SERVICE )
-    private IFollowService _followService;
-    @Inject
-    @Named(FollowConstants.BEAN_CONFIG_SERVICE)
+    @Named( FollowConstants.BEAN_CONFIG_SERVICE )
     private IResourceExtenderConfigService _configService;
+
+    @Inject
+    private FollowResourceExtenderComponent _resourceExtenderComponent;
+
+    /**
+     * Sets the properties of the follow extender.
+     */
+    @PostConstruct
+    void init( )
+    {
+        setKey( RESOURCE_EXTENDER );
+        setI18nTitleKey( I18N_TITLE_KEY );
+        setConfigRequired( true );
+        setHistoryEnable( true );
+        setStateEnable( true );
+        setResourceExtenderComponent( _resourceExtenderComponent );
+    }
 
     /**
      * {@inheritDoc}

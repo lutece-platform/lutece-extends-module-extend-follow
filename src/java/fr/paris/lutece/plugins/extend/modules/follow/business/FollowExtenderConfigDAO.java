@@ -38,12 +38,14 @@ import fr.paris.lutece.plugins.extend.business.extender.config.IExtenderConfigDA
 import fr.paris.lutece.plugins.extend.modules.follow.service.FollowPlugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-import java.sql.Statement;
+import jakarta.enterprise.context.ApplicationScoped;
+
 
 /**
  * This class provides Data Access methods for FollowExtenderConfig objects
  */
-public final class FollowExtenderConfigDAO implements IExtenderConfigDAO<FollowExtenderConfig>
+@ApplicationScoped
+public class FollowExtenderConfigDAO implements IExtenderConfigDAO<FollowExtenderConfig>
 {
     // Constants
     private static final String SQL_QUERY_SELECT    = "SELECT id_extender, authenticated_mode FROM extend_follow_config WHERE id_extender = ?";
@@ -57,7 +59,7 @@ public final class FollowExtenderConfigDAO implements IExtenderConfigDAO<FollowE
     @Override
     public void insert( FollowExtenderConfig followExtenderConfig )
     {
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, FollowPlugin.getPlugin( ) ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, FollowPlugin.getPlugin( ) ) )
         {    
             int nIndex = 0;
             daoUtil.setInt( ++nIndex, followExtenderConfig.getIdExtender( ) );
